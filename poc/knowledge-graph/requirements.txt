@@ -1,6 +1,7 @@
 langchain
 langchain-neo4j
 langchain-openai
+langchain-ollama
 langgraph
 python-dotenv
 langchain_experimental
