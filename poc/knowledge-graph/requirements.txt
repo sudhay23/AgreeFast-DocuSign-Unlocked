@@ -1,0 +1,8 @@
+langchain
+langchain-neo4j
+langchain-openai
+langgraph
+python-dotenv
+langchain_experimental
+unstructured[all-docs]
+langchain_text_splitters
