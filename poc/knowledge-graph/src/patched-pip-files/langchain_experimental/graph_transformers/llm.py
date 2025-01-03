@@ -261,6 +261,8 @@ def create_unstructured_prompt(
         "understandable, so maintaining consistency in entity references is "
         "crucial.",
         "IMPORTANT NOTES:\n- Don't add any explanation and text. Make sure to capture ALL dates in the 'Date' entity type (Example: December 25, 2010) and relations further from the date node without fail.",
+        "IMPORTANT: If you see any relative time period (Example: period of 5 years after, period of five (5) years after termination or expiration, atleast 2 months before, etc...), make a Node of entity type 'Relative Time Period' and map it to the 'Document' using the 'MENTIONS' relationship",
+        "IMPORTANT: Use the entity type 'Obligations' to capture KEY and MOST IMPORTANT requirements and statements that should be upheld to keep the agreement valid and map it to the 'Document' using the 'MENTIONS' relationship",
         additional_instructions,
     ]
     system_prompt = "\n".join(filter(None, base_string_parts))
