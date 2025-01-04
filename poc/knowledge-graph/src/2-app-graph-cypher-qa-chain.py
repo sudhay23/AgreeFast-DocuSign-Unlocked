@@ -9,7 +9,8 @@ llm = provision_chat_model()
 graph = Neo4jGraph(url=os.getenv("NEO4J_URI"),database=f"neo4j",username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
 graph.refresh_schema()
 
-chain = GraphCypherQAChain.from_llm(llm=llm,graph=graph,verbose=True,allow_dangerous_requests=True,validate_cypher=False)
+return_raw_docs_chain = GraphCypherQAChain.from_llm(llm=llm,graph=graph,verbose=True,allow_dangerous_requests=True,validate_cypher=False,return_direct=True)
+# return_processed_answer_chain = GraphCypherQAChain.from_llm(llm=llm,graph=graph,verbose=True,allow_dangerous_requests=True,validate_cypher=False,return_direct=False)
 
 # query = "What are the dates i should be bothered by"
 # query = "What are the dates i should be bothered by and what happened in each day"  # IMPORTANT FOR ICS FILE CREATION
@@ -21,4 +22,4 @@ chain = GraphCypherQAChain.from_llm(llm=llm,graph=graph,verbose=True,allow_dange
 # query = "what are the renewal terms"
 query = "how soon should the atm be put"
 
-print(chain.run(query))
+print(return_raw_docs_chain.run(query))
