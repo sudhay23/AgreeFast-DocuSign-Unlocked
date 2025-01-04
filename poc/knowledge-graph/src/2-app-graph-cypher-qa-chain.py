@@ -18,6 +18,7 @@ chain = GraphCypherQAChain.from_llm(llm=llm,graph=graph,verbose=True,allow_dange
 # query = "who should i contact about legal issues and tell in detail"
 # query = "how much was the person paid while leaving"
 # query = "will they work on holidays"
-query = "what are the renewal terms"
+# query = "what are the renewal terms"
+query = "how soon should the atm be put"
 
 print(chain.run(query))

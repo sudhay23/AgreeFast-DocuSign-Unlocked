@@ -3,10 +3,38 @@ from pydantic import BaseModel
 from typing import List
 from langchain.prompts import ChatPromptTemplate
 
-CAPTURE_OBLIGATORY_STATEMENTS_PROMPT = """
+CAPTURE_OBLIGATORY_STATEMENTS_PROMPT = ChatPromptTemplate.from_template("""
+    You are an expert in capturing statments from an agreement that are key obligations by the party in order to keep the agreement valid. Make sure to summarize the obligation/requirement statement without losing information to be conveyed.
+    Most importantly, assume that a list of such obligations and key requirements and highlight statements you capture will be used to create a bigger exhaustive list of important duties and obligations of the parties involved which when failed to upheld will render the agreement void.
+    So, take care not to invent new facts and only summarize what's already there in the content chunk given to you. Make sure to phrase all statements in 3rd party tone addressing the respective parties in the statements.
+    IMPORTANT NOTES: Never explain yourself. Just return the JSON and nothing else. Follow the schema carefully. Avoid duplications and ignore trivial statements. Assign an "importance level" score on a scale of 1 - 3 based on how important the obligation is and how risky it will be if forfeited (1 being least important, 3 being highly important).
+    Fill in the 'responsible_party_role_name' field in all uppercase format denoting the party to whom the statement is essential.
 
+    <json_schema_for_your_reply> 
+            {{
+                'captured_now': [{{
+                            "obligation_statement": "The Obligation Statement",
+                            "importance_level": "Valid Date DD-MM-YYYY",
+                            "responsible_party_role_name": "RoleNameOfTheResponsibleParty (eg. Lessee, Lessor, Owner, CEO, etc...)",
+                        }}]
+            }}
+    </json_schema_for_your_reply>
 
-"""
+    <json_data_already_captured_so_far> {captured_data} </json_data_already_captured_so_far>
+
+    <current_content_chunk> {content_chunk} </current_content_chunk>
+        
+
+    Your Array of JSONs reply:
+""")
+
+class ObligatoryStatementData(BaseModel):
+    obligation_statement: str
+    importance_level: int
+    responsible_party_role_name: str
+
+class ObligatoryStatementResponse(BaseModel):
+    captured_now: List[ObligatoryStatementData]
 
 # --------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -40,6 +68,7 @@ CAPTURE_KEY_TIME_PERIODS_PROMPT = ChatPromptTemplate.from_template("""
     You are an expert in finding dates (eg. March 20, 2012), relative time periods (eg. 5 years from signing this agreement, 3 years before expiry) along with the tasks or event that occurs at those dates and delivering as JSON according to the given schema.
     NOTE: In case of relative time periods, appropriately fill in the missing start or end date from the data already captured. Use the related date from the provided content chunk or the already captured data. 
     Data already captured is a JSON. You need to incrementally keep adding to this JSON with the data you capture now. IMPORTANTLY, Ignore the event if a valid start and end date could not be identified confidently. Do NOT assume any date for any event if there is no logical rationale. Just ignore the event in those cases.
+    MOST IMPORTANTLY, never fail to miss key dates and times.
     IMPORTANT NOTES: Never explain yourself. Just return the JSON and nothing else. Follow the schema carefully.
     IMPORTANT: If an end date or start date is missing, rephrase the event description to sound like a one day event with the date you have i.e match the start and end date. Try to keep events phrased in a way to sound like one day events. (Example: Event1 - Agreement comes effective on January 3,2020 | Event2 - Agreement expires on January 3,2025). Make sure the link between these events is clearly mentioned in the description (Example: Event1's description will state that expiry is on January 3,2025)
 
