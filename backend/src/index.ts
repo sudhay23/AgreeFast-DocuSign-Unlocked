@@ -1,53 +1,97 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import axios from 'axios';
-import cron from 'node-cron';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 import { writeToFile } from './utils.js';
+import Envelope from './models/Envelope.js';
+import amqp from 'amqplib';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 dotenv.config();
 
+// Resolve __dirname for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = 5000;
-const TOKEN = process.env.WEBHOOK_TOKEN;
+const MONGODB_URI = process.env.MONGODB_URI;
+const RABBITMQ_URI = process.env.RABBITMQ_URI; // Add RabbitMQ URI to your .env file
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
-const seenRequests = new Set<string>();
+// Serve static files from the 'static' directory
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
-const fetchRequest = async () => {
-  const res = await axios.get(
-    `https://webhook.site/token/${TOKEN}/requests?sorting=newest`
-  );
-  const requests = res.data.data;
-  const newRequests = requests.filter(
-    (request: any) => !seenRequests.has(request.uuid)
-  );
-  for (const request of newRequests) {
-    const req = JSON.parse(request.content);
-    if (req.data?.envelopeSummary?.envelopeDocuments) {
-      const docs = req.data.envelopeSummary.envelopeDocuments;
-      docs.forEach((doc: any) => {
-        if (doc.documentIdGuid && doc.PDFBytes) {
-          writeToFile(doc.documentIdGuid, doc.PDFBytes);
-        }
-      });
+let channel: amqp.Channel;
+
+// Connect to RabbitMQ
+const connectRabbitMQ = async () => {
+  try {
+    const connection = await amqp.connect(RABBITMQ_URI!); // Ensure you have the correct RabbitMQ URI
+    channel = await connection.createChannel();
+    await channel.assertQueue('envelopeQueue', { durable: true }); // Ensure the queue exists
+    console.log('Connected to RabbitMQ');
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error('Error connecting to RabbitMQ:', err.message);
+    } else {
+      console.error('Error connecting to RabbitMQ:', err);
     }
-    seenRequests.add(request.uuid);
   }
 };
 
-// Run the cron job every minute
-cron.schedule('* * * * *', async () => {
-  fetchRequest();
-});
+// Connect to MongoDB
+mongoose
+  .connect(MONGODB_URI!)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.log('Error connecting to MongoDB:', err.message);
+  });
+
+// Initialize RabbitMQ connection
+connectRabbitMQ();
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World');
 });
 
+app.post('/webhook', async (req: Request, res: Response) => {
+  // console.log(req.body);
+  const type = req.body.event;
+  if (type == 'envelope-sent') {
+    console.log('type: ', type);
+    const data = req.body.data;
+    const envelope = new Envelope();
+    envelope.envelope_id = data.envelopeId;
+    envelope.recipients_emails = data.envelopeSummary.recipients.signers.map(
+      (signer: any) => signer.email
+    );
+    envelope.sender_id = data.userId;
+    envelope.sender_email = data.envelopeSummary.sender.email;
+
+    const docs = data.envelopeSummary.envelopeDocuments.filter(
+      (doc: any) => doc.name != 'Summary'
+    );
+    const agreements = [];
+    for (const doc of docs) {
+      writeToFile(doc.documentIdGuid, doc.PDFBytes);
+      agreements.push(`/static/${doc.documentIdGuid}.pdf`);
+    }
+    envelope.agreements = agreements;
+    await envelope.save();
+    if (channel) {
+      channel.sendToQueue('envelopeQueue', Buffer.from(data.envelopeId));
+      console.log(`${data.envelopeId} sent to envelopeQueue`);
+    }
+  }
+  res.sendStatus(200);
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port :${PORT}`);
-  console.log('Listening for new requests...');
 });
