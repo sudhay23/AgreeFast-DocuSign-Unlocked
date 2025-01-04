@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   neo4j:
-    image: neo4j # Replace with the desired Neo4j version
+    image: neo4j:enterprise # Replace with the desired Neo4j version
     container_name: neo4j
     ports:
       - "7474:7474" # HTTP interface
@@ -13,6 +13,7 @@ services:
       - NEO4J_dbms_memory_heap_max__size=1G
       - NEO4J_dbms_logs_debug_level=INFO
       - NEO4J_PLUGINS=["apoc","apoc-extended"]
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs

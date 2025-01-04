@@ -9,3 +9,5 @@ unstructured[all-docs]
 langchain_text_splitters
 fastapi[standard]
 uvicorn[standard]
+pika
+aio-pika
