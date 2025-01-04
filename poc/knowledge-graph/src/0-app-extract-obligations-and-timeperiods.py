@@ -12,6 +12,7 @@ from utils.prompts import CAPTURE_KEY_TIME_PERIODS_PROMPT, DateEventResponse, PR
 llm = provision_chat_model()
 # document_link = "http://127.0.0.1:5500/static_store/Employee%20Seperation.pdf"
 document_link = "http://127.0.0.1:5500/static_store/MSA.pdf"
+# document_link = "http://127.0.0.1:5500/static_store/Sales%20MoU.pdf"
 splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
 loader = OnlinePDFLoader(document_link)
 
@@ -35,7 +36,7 @@ print(date_events)
 # Construct ICS file
 ics_response = llm.with_structured_output(ICSResponse).invoke(PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
 print(ics_response)
-with open("./myfile4.ics","w") as fp:
+with open("./myfile2.ics","w") as fp:
     fp.write(ics_response.data)
 
 # TODO: Extract Obligations
