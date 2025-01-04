@@ -1,12 +1,20 @@
 import dotenv
 dotenv.load_dotenv("../../../.env")
-
+import asyncio
 from fastapi import FastAPI, Response, Request
 from utils.model import provision_chat_model, provision_embedding_model
 from utils.fetch_rag_context import get_final_chat_answer
+from utils.rabbitmq import create_rabbitmq_connection
 
 # Create the FastAPI Server
 app = FastAPI()
+
+# Startup event to launch the RabbitMQ consumer in the background
+@app.on_event("startup")
+async def startup():
+    # Start the RabbitMQ consumer in a background task
+    loop = asyncio.get_event_loop()
+    loop.create_task(create_rabbitmq_connection())
 
 # GET / endpoint
 @app.get("/")
