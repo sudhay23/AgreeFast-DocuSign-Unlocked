@@ -9,8 +9,10 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 llm = provision_chat_model()
 graph = Neo4jGraph(url=os.getenv("NEO4J_URI"),database=f"neo4j",username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
+document_link = "http://127.0.0.1:5500/static_store/Premise%20Leasing.pdf"
 # document_link = "http://127.0.0.1:5500/static_store/Employee%20Seperation.pdf"
-document_link = "http://127.0.0.1:5500/static_store/MSA.pdf"
+# document_link = "http://127.0.0.1:5500/static_store/MSA.pdf"
+# document_link = "http://127.0.0.1:5500/static_store/Sales%20MoU.pdf"
 splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
 loader = OnlinePDFLoader(document_link)
 
