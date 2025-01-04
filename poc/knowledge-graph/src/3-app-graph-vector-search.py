@@ -2,15 +2,15 @@ import dotenv
 dotenv.load_dotenv("./.env")
 import os,time
 from utils.model import provision_chat_model
-from langchain_neo4j import Neo4jVector
+from langchain_neo4j import Neo4jVector, Neo4jGraph
 from langchain.embeddings.ollama import OllamaEmbeddings
 
 llm = provision_chat_model()
 embedding_model = OllamaEmbeddings(base_url=os.getenv("OLLAMA_URI"),model="nomic-embed-text")
-# graph = Neo4jGraph(url=os.getenv("NEO4J_URI"),database=f"neo4j",username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
+graph = Neo4jGraph(url=os.getenv("NEO4J_URI"),database=f"neo4j",username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
 
 
-neo4j_vector = Neo4jVector(embedding_model,url=os.getenv("NEO4J_URI"),database=f"neo4j",username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
+neo4j_vector = Neo4jVector(embedding_model,graph=graph)
 vector_store = neo4j_vector.from_existing_graph(embedding=embedding_model,search_type="vector",node_label="Document",text_node_properties=['text'],embedding_node_property="vector_embedding",)
 
 
