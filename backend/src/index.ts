@@ -29,8 +29,8 @@ const fetchRequest = async () => {
     if (req.data?.envelopeSummary?.envelopeDocuments) {
       const docs = req.data.envelopeSummary.envelopeDocuments;
       docs.forEach((doc: any) => {
-        if (doc.name && doc.PDFBytes) {
-          writeToFile(doc.name, doc.PDFBytes);
+        if (doc.documentIdGuid && doc.PDFBytes) {
+          writeToFile(doc.documentIdGuid, doc.PDFBytes);
         }
       });
     }
