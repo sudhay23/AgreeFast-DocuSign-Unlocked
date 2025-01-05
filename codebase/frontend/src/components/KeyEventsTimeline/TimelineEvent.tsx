@@ -2,6 +2,7 @@ import React from "react";
 import { Check, Clock, Calendar, ArrowRight } from "lucide-react";
 import { Event } from "./types";
 import { formatDate, getTimeDifference } from "../../lib/utils";
+import { Tooltip } from "react-tooltip";
 
 interface TimelineEventProps {
   event: Event;
@@ -41,6 +42,8 @@ export function TimelineEvent({ event, onClick, isLast }: TimelineEventProps) {
             bg-white border-t-2 ${
               isPast ? "border-green-500" : "border-orange-500"
             }`}
+          data-tooltip-id="event-details-tooltip"
+          data-tooltip-content={event.description}
         >
           <h3 className="font-medium text-sm mb-3 line-clamp-2 text-black">
             {event.summary}
