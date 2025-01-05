@@ -63,7 +63,7 @@ app.get('/', (req: Request, res: Response) => {
 app.post('/webhook', async (req: Request, res: Response) => {
   // console.log(req.body);
   const type = req.body.event;
-  if (type == 'envelope-sent') {
+  if (type == 'envelope-sent' || type == 'envelope-complete') {
     console.log('type: ', type);
     const data = req.body.data;
     const envelope = new Envelope();
@@ -80,7 +80,11 @@ app.post('/webhook', async (req: Request, res: Response) => {
     const agreements = [];
     for (const doc of docs) {
       writeToFile(doc.documentIdGuid, doc.PDFBytes);
-      agreements.push(`/static/${doc.documentIdGuid}.pdf`);
+      // agreements.push(`/static/${doc.documentIdGuid}.pdf`);
+      agreements.push({
+        'file_name': doc.name,
+        'file_uri': `/static/${doc.documentIdGuid}.pdf`,
+      });
     }
     envelope.agreements = agreements;
     await envelope.save();
