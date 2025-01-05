@@ -3,6 +3,7 @@ from utils.neo4j import create_graph_database_for_envelope, build_neo4j_knowledg
 from utils.mongodb import get_envelope_details
 from utils.model import provision_chat_model, provision_embedding_model
 from utils.extract_data import extract_events, extract_obligatory_statements, constuct_ics_file, calculate_compliance_obligatory_score
+from utils.api import notify_backend_ai_process_completion
 
 async def create_rabbitmq_connection():
     connection = await aio_pika.connect_robust(os.getenv("RABBITMQ_CONNECTION_STRING"))
@@ -46,7 +47,8 @@ async def queue_consumer_callback(message: aio_pika.IncomingMessage):
                 calculate_compliance_obligatory_score(envelope_id, llm, embedding_model)
 
 
-                #TODO Call 'ai_processing_complete' endpoint on API Server
+                #TODO Call 'ai_processing_complete' endpoint on Backend API Server
+                notify_backend_ai_process_completion(envelope_id)
 
                 print(f"AI Processing complete for envelope {envelope_id}")
                 await message.ack()
