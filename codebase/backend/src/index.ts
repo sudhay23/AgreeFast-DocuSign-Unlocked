@@ -22,6 +22,15 @@ dotenv.config({
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+console.log(
+  'Resolved .env file path:',
+  path.join(__dirname, '..', '..', '..', '.env')
+);
+
+dotenv.config({
+  path: path.join(__dirname, '..', '..', '..', '.env'), // Going up two levels from backend
+});
+
 const app = express();
 const PORT = 5500;
 const MONGODB_URI = process.env.MONGODB_URI;
