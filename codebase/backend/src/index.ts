@@ -23,12 +23,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 console.log(
-  'Resolved .env file path:',
-  path.join(__dirname, '..', '..', '..', '.env')
+  "Resolved .env file path:",
+  path.join(__dirname, "..", "..", "..", ".env")
 );
 
 dotenv.config({
-  path: path.join(__dirname, '..', '..', '..', '.env'), // Going up two levels from backend
+  path: path.join(__dirname, "..", "..", "..", ".env"), // Going up two levels from backend
 });
 
 const app = express();
@@ -108,8 +108,11 @@ app.post("/webhook", async (req: Request, res: Response) => {
     envelope.agreements = agreements;
     await envelope.save();
     if (channel) {
-      channel.sendToQueue("envelopeQueue", Buffer.from(data.envelopeId));
-      console.log(`${data.envelopeId} sent to envelopeQueue`);
+      channel.sendToQueue(
+        RABBITMQ_QUEUE!,
+        Buffer.from(`{"envelope_id":"${data.envelopeId}"}`)
+      );
+      console.log(`${data.envelopeId} sent to '${RABBITMQ_QUEUE}'`);
     }
   }
   res.sendStatus(200);
