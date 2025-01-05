@@ -5,9 +5,7 @@ from utils.neo4j import get_neo4j_db_name
 
 # Get Vector Embedding based context
 def get_vector_embedding_context(user_question, envelope_id, llm, embedding_model):
-    graph = Neo4jGraph(url=os.getenv("NEO4J_URI"),database=get_neo4j_db_name(envelope_id),username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
-    neo4j_vector = Neo4jVector(embedding_model,graph=graph)
-    vector_store = neo4j_vector.from_existing_graph(embedding=embedding_model,search_type="hybrid",node_label="Document",text_node_properties=['text'],embedding_node_property="vector_embedding")
+    vector_store = Neo4jVector.from_existing_graph(embedding=embedding_model,search_type="hybrid",node_label="Document",text_node_properties=['text'],embedding_node_property="vector_embedding",url=os.getenv("NEO4J_URI"),database=get_neo4j_db_name(envelope_id),username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
 
     # Collect Vector Embedding based context
     similar_vector_docs_with_score = vector_store.similarity_search_with_score(user_question, k=10)
@@ -21,7 +19,7 @@ def get_graph_cypher_context(user_question, envelope_id, llm, embedding_model):
     # Just in time Cypher generation based retrival from Knowledge Graph
     return_raw_docs_cypher_chain = GraphCypherQAChain.from_llm(llm=llm,graph=graph,verbose=False,allow_dangerous_requests=True,validate_cypher=False,return_direct=True)
 
-    retry = 7 
+    retry = 5 
     graph_text_context = ""
     while retry>=0:
         retry -= 1
