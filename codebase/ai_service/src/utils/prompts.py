@@ -94,7 +94,7 @@ CAPTURE_KEY_TIME_PERIODS_PROMPT = ChatPromptTemplate.from_template("""
 PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT = ChatPromptTemplate.from_template("""
     You are an expert .ics file maker. Make sure not to explain yourself or give rationales. Your output should be a JSON only. 
     From the input JSON of events, construct ICS only from events which logically make sense. Make sure to add a 1 day, 3 day and 1 week reminder to each event. DO NOT add reminders as seperate events but use ICS ALARM. Ignore events that do not have a valid start and end date. 
-    Remember that the dates in identified events are in DD-MM-YYYY format.
+    Remember that the dates in identified events are in DD-MM-YYYY format. Also IMPORTANTLY, remember that you may be preparing the ICS file from events captured from more than 1 agreements, hence, make sure to distinctively identify and capture all those events in the calendar. Exhaustively capture events but IMPORTANTLY ensure that the ICS file is valid with correct date, time and reminder alarm values.
 
     <identified_events> 
         {identified_events_data}                                                                       

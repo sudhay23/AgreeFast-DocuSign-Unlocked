@@ -1,4 +1,4 @@
-import dotenv
+import dotenv,os
 dotenv.load_dotenv("../../../.env")
 import asyncio
 from fastapi import FastAPI, Response, Request
