@@ -1,5 +1,6 @@
 import aio_pika, os, asyncio, json
 from utils.neo4j import create_graph_database_for_envelope
+from utils.mongodb import get_envelope_details
 
 async def create_rabbitmq_connection():
     connection = await aio_pika.connect_robust(os.getenv("RABBITMQ_CONNECTION_STRING"))
@@ -23,15 +24,21 @@ async def queue_consumer_callback(message: aio_pika.IncomingMessage):
                 
                 # Create a Neo4j Graph DB
                 neo4j_db_name = create_graph_database_for_envelope(envelope_id)
-                #TODO Get the envelope data from MongoDB
+
+                # Get the envelope data from MongoDB
+                envelope_doc = get_envelope_details(envelope_id)
+                print(envelope_doc)
+
                 #TODO Loop through all documents and perform AI processing to build the knowledge graph
-                #TODO Change 'ai_processing_complete' field to True in MongoDB
+
+
+                #TODO Call 'ai_processing_complete' endpoint on API Server
 
 
                 message.ack()
                 return
             except Exception as e:
-                print("JSON Formatting in payload is incorrect: ",e)
+                print("Error Occured: ",e)
                 print("Got: ",message.body.decode())
                 message.nack()
                 return
