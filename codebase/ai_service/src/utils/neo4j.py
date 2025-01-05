@@ -16,3 +16,7 @@ def create_graph_database_for_envelope(envelope_id):
 
 def get_neo4j_db_name(envelope_id:str):
     return f'neo4j{envelope_id.replace("-","")}'
+
+# TODO
+def build_neo4j_knowledge_graph(envelope_id):
+    pass
