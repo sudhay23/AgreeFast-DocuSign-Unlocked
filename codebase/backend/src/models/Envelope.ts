@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 // Interface for Obligation
 interface IObligation {
@@ -44,13 +44,14 @@ const EnvelopeSchema: Schema = new Schema({
   sender_id: { type: String, required: true },
   sender_email: { type: String, required: true },
   recipients_emails: { type: [String], required: true },
-  obligation_score: { type: Number },
+  compliance_obligatory_score: { type: Number },
   obligations: {
     type: [
       {
         obligation_statement: { type: String },
         importance_level: { type: Number },
         responsible_party_role_name: { type: String },
+        document_name: { type: String },
       },
     ],
     default: [],
@@ -62,13 +63,13 @@ const EnvelopeSchema: Schema = new Schema({
         end_date: { type: String },
         description: { type: String },
         recurring: { type: String },
+        document_name: { type: String },
       },
     ],
     default: [],
   },
   signed_on: { type: Date },
   ics_data: { type: String },
-  knowledge_graph_db_name: { type: String },
   agreements: {
     type: [
       {
@@ -82,6 +83,6 @@ const EnvelopeSchema: Schema = new Schema({
 });
 
 // Create the model
-const Envelope = mongoose.model<IEnvelope>('Envelope', EnvelopeSchema);
+const Envelope = mongoose.model<IEnvelope>("Envelope", EnvelopeSchema);
 
 export default Envelope;

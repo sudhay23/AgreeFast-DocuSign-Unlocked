@@ -9,7 +9,7 @@ async def create_rabbitmq_connection():
     connection = await aio_pika.connect_robust(os.getenv("RABBITMQ_CONNECTION_STRING"))
     channel = await connection.channel()
     queue = await channel.declare_queue(os.getenv("RABBITMQ_WORKER_QUEUE_NAME"), durable=True)
-    await queue.consume(queue_consumer_callback)
+    await queue.consume(queue_consumer_callback,no_ack=True)
 
     # Keep the consumer running
     print("Started RabbitMQ consumer...")
@@ -22,7 +22,7 @@ async def queue_consumer_callback(message: aio_pika.IncomingMessage):
                 envelope_id = message_payload.get("envelope_id",None)
                 if not envelope_id:
                     print("Message payload should contain 'envelope_id'")
-                    await message.nack(requeue=False)
+                    # await message.nack(requeue=False)
                     return
                 
                 # Create a Neo4j Graph DB
@@ -47,15 +47,15 @@ async def queue_consumer_callback(message: aio_pika.IncomingMessage):
                 calculate_compliance_obligatory_score(envelope_id, llm, embedding_model)
 
 
-                #TODO Call 'ai_processing_complete' endpoint on Backend API Server
+                # Call 'ai_processing_complete' endpoint on Backend API Server
                 notify_backend_ai_process_completion(envelope_id)
 
                 print(f"AI Processing complete for envelope {envelope_id}")
-                await message.ack()
+                # await message.ack()
                 return
             except Exception as e:
                 print("Error Occured: ",e)
                 traceback.print_exception(e)
                 print("Got: ",message.body.decode())
-                await message.nack(requeue=False)
+                # await message.nack(requeue=False)
                 return
