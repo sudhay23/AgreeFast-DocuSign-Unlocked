@@ -9,6 +9,7 @@ from utils.prompts import CAPTURE_KEY_TIME_PERIODS_PROMPT, DateEventResponse, PR
 
 
 def extract_events(envelope_id, document_name, document_path, llm, embedding_model):
+    print(f"----Extracting events in '{document_name}'----")
     document_link = f"{os.getenv('BACKEND_BASE_URL')}{document_path}"
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
@@ -33,6 +34,7 @@ def extract_events(envelope_id, document_name, document_path, llm, embedding_mod
 
 
 def constuct_ics_file(envelope_id, llm, embedding_model):
+    print(f"----Building ICS file for envelope '{envelope_id}'----")
     # Get all recorded events from DB
     date_events = get_envelope_details(envelope_id)['events']
 
@@ -43,6 +45,7 @@ def constuct_ics_file(envelope_id, llm, embedding_model):
     update_events_ics(envelope_id,ics_response.data)
     
 def extract_obligatory_statements(envelope_id, document_name, document_path, llm, embedding_model):
+    print(f"----Extracting obligatory statements in '{document_name}'----")
     document_link = f"{os.getenv('BACKEND_BASE_URL')}{document_path}"
 
     # Extract Obligations
