@@ -18,7 +18,7 @@ def update_events_ics(envelope_id, icsFile):
     mongoclient = pymongo.MongoClient(os.getenv("MONGODB_URI"))
     db = mongoclient["test"]
     collection = db["envelopes"]
-    result = collection.update_one({"envelope_id":envelope_id},{"$set":{"event_ics":icsFile}})
+    result = collection.update_one({"envelope_id":envelope_id},{"$set":{"ics_data":icsFile}})
     return result
 
 def update_obligatory_statements(envelope_id, obligatory_statements):
@@ -32,6 +32,6 @@ def update_compliance_obligatory_score(envelope_id, compliance_obligatory_score)
     mongoclient = pymongo.MongoClient(os.getenv("MONGODB_URI"))
     db = mongoclient["test"]
     collection = db["envelopes"]
-    result = collection.update_one({"envelope_id":envelope_id},{"$set":{"compliance_obligatory_scores":compliance_obligatory_score}})
+    result = collection.update_one({"envelope_id":envelope_id},{"$set":{"compliance_obligatory_score":compliance_obligatory_score}})
     return result
 
