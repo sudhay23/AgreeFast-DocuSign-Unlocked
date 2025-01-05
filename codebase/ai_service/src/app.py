@@ -1,6 +1,6 @@
 import dotenv
 dotenv.load_dotenv("../../../.env")
-import asyncio
+import asyncio, uvicorn
 from fastapi import FastAPI, Response, Request
 from utils.model import provision_chat_model, provision_embedding_model
 from utils.fetch_rag_context import get_final_chat_answer
@@ -46,3 +46,6 @@ async def docusign_envelope_chat(req:Request, res: Response):
 
     return {"error": None, "response":str(response.content)}
     
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=6500)
