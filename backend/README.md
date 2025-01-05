@@ -34,7 +34,7 @@ This document outlines the endpoints and schema for the Envelope Management API,
 
 ### **4. Get Score**
 
-- **Endpoint**: `/{envelopeId}/getScore`
+- **Endpoint**: `/{envelopeId}/getObligationScore`
 - **Method**: `GET`
 - **Description**: Retrieves the obligatory score for the specified envelope.
 - **Response**:
