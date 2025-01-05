@@ -27,7 +27,7 @@ export interface IEnvelope extends Document {
   sender_id: string;
   sender_email: string;
   recipients_emails: string[];
-  obligatory_score?: number;
+  obligation_score?: number;
   obligations?: IObligation[];
   events?: IEvent[];
   signed_on?: Date;
@@ -44,7 +44,7 @@ const EnvelopeSchema: Schema = new Schema({
   sender_id: { type: String, required: true },
   sender_email: { type: String, required: true },
   recipients_emails: { type: [String], required: true },
-  obligatory_score: { type: Number },
+  obligation_score: { type: Number },
   obligations: {
     type: [
       {
