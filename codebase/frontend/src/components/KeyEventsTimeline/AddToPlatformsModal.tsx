@@ -2,7 +2,16 @@ import React from "react";
 import { Event } from "./types";
 import { Calendar02Icon } from "hugeicons-react";
 
-export const AddToPlatformsModal = () => {
+export const AddToPlatformsModal = ({ ics }: { ics: string }) => {
+  const downloadICS = () => {
+    const blob = new Blob([ics], { type: "text/calendar" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `agreefast-key-events.ics`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
   return (
     <dialog
       id="add_events_to_platforms_modal"
@@ -15,7 +24,7 @@ export const AddToPlatformsModal = () => {
         <div className="flex flex-wrap gap-3 items-center justify-start mt-5">
           <button
             onClick={() => {
-              console.log("Adding");
+              downloadICS();
             }}
             className="bg-violet text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
           >

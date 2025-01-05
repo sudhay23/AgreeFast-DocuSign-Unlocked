@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChartColors } from "./utils";
 import { createArc } from "./utils";
 import { Obligation, ProcessedData } from "./types";
+import { WavingHand02Icon } from "hugeicons-react";
 
 export const DonutChart = ({
   data,
@@ -74,13 +75,9 @@ export const DonutChart = ({
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center animate-in zoom-in">
       <div className="relative">
-        <svg
-          width={size}
-          height={size}
-          className="transform transition-transform duration-75"
-        >
+        <svg width={size} height={size} className="">
           {processedData.map((segment) => (
             <g key={segment.role}>
               <path
@@ -92,7 +89,7 @@ export const DonutChart = ({
                   centerY
                 )} L ${centerX},${centerY} Z`}
                 fill={segment.color}
-                className="transition-all duration-300 cursor-pointer"
+                className="cursor-pointer"
                 onMouseEnter={() => setHoveredSegment(segment)}
                 onMouseLeave={() => setHoveredSegment(null)}
                 onClick={() => handleSegmentClick(segment)}
@@ -120,7 +117,7 @@ export const DonutChart = ({
                     centerX,
                     centerY
                   )} L ${centerX},${centerY} Z`}
-                  dur="1s"
+                  dur="0.1s"
                   fill="freeze"
                   key={segment.role}
                 />
@@ -135,7 +132,7 @@ export const DonutChart = ({
           />
         </svg>
 
-        {hoveredSegment && (
+        {hoveredSegment ? (
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
             <p className="font-medium text-[12px] text-black">
               {hoveredSegment.role}
@@ -144,6 +141,11 @@ export const DonutChart = ({
               {hoveredSegment.count} obligation
               {hoveredSegment.count !== 1 ? "s" : ""}
             </p>
+          </div>
+        ) : (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center flex flex-col items-center gap-1">
+            <WavingHand02Icon size={25} className="text-black animate-pulse" />
+            <p className="text-[12px]">Hover and click</p>
           </div>
         )}
       </div>

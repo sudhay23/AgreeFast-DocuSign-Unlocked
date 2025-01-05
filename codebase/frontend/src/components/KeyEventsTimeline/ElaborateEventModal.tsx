@@ -4,6 +4,32 @@ import { formatDate, openModal } from "@/lib/utils";
 import { Calendar02Icon } from "hugeicons-react";
 
 export const ElaborateEventModal = ({ event }: { event: Event | null }) => {
+  const downloadICS = () => {
+    if (!event) return;
+    const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+SUMMARY:${event.summary}
+DTSTART;VALUE=DATE:${
+      event.startDate.toISOString().replace(/[-:]/g, "").split("T")[0]
+    }
+DTEND;VALUE=DATE:${
+      event.endDate.toISOString().replace(/[-:]/g, "").split("T")[0]
+    }
+DESCRIPTION:${event.description}
+END:VEVENT
+END:VCALENDAR`;
+
+    const blob = new Blob([icsContent], { type: "text/calendar" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${event.summary}.ics`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <dialog id="elaborate_event_modal" className="modal bg-white bg-opacity-30">
       <div className="modal-box bg-white">
@@ -25,6 +51,7 @@ export const ElaborateEventModal = ({ event }: { event: Event | null }) => {
           <button
             onClick={() => {
               console.log("Adding");
+              downloadICS();
             }}
             className="bg-violet text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
           >

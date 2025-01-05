@@ -6,11 +6,13 @@ import { TimelineEvent } from "./TimelineEvent";
 import { Event } from "./types";
 import { AddToPlatformsModal } from "./AddToPlatformsModal";
 import { ElaborateEventModal } from "./ElaborateEventModal";
+import { Tooltip } from "react-tooltip";
 
 export const KeyEventsTimeline = () => {
   const [activeEvent, setActiveEvent] = useState<Event | null>(null);
+  const [ics, setIcs] = useState<string>(icsContent);
 
-  const events = parseICSContent(icsContent);
+  const events = parseICSContent(ics);
 
   return (
     <div className="border-violet border-2 border-opacity-15 p-8 rounded-3xl flex-1">
@@ -40,18 +42,27 @@ export const KeyEventsTimeline = () => {
             />
           ))}
         </div>
-        <div className="flex items-center gap-2 mt-3">
-          <CursorMagicSelection02Icon
-            strokeWidth={2}
-            className="text-violet text-opacity-50"
-            size={20}
-          />
-          <p className="text-violet text-opacity-50 text-[14px]">
-            Click on each event to see more details
-          </p>
-        </div>
       </div>
-      <AddToPlatformsModal />
+      <div className="flex items-center gap-2 mt-3">
+        <CursorMagicSelection02Icon
+          strokeWidth={2}
+          className="text-violet text-opacity-50"
+          size={20}
+        />
+        <p className="text-violet text-opacity-50 text-[14px]">
+          Click on each event to see more details
+        </p>
+      </div>
+      <Tooltip
+        id="event-details-tooltip"
+        style={{
+          backgroundColor: "whitesmoke",
+          color: "black",
+          maxWidth: "400px",
+        }}
+        place="top"
+      />
+      <AddToPlatformsModal ics={ics} />
       <ElaborateEventModal event={activeEvent} />
     </div>
   );
