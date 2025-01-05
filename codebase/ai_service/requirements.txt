@@ -11,3 +11,4 @@ fastapi[standard]
 uvicorn[standard]
 pika
 aio-pika
+pymongo
