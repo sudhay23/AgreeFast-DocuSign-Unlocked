@@ -7,6 +7,7 @@ import Envelope from './models/Envelope.js';
 import amqp from 'amqplib';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import envelopeRoutes from './routes/envelopeRoutes.js';
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
-const RABBITMQ_URI = process.env.RABBITMQ_URI; // Add RabbitMQ URI to your .env file
+const RABBITMQ_URI = process.env.RABBITMQ_URI;
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -55,6 +56,8 @@ mongoose
 
 // Initialize RabbitMQ connection
 connectRabbitMQ();
+
+app.use('/api/envelope', envelopeRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World');
