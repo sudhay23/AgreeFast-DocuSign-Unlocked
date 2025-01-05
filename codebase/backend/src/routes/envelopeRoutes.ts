@@ -20,6 +20,7 @@ router.get(
   }
 );
 
+// TODO: Implement email functionality
 router.put(
   '/:id/activate',
   async (req: Request, res: Response): Promise<any> => {
