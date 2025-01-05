@@ -20,8 +20,8 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
     circumference - (animatedPercentage / 100) * circumference;
 
   const getColor = (value: number) => {
-    if (value < 40) return "#22c55e"; // green-500
-    if (value < 80) return "#eab308"; // yellow-500
+    if (value < 70) return "#22c55e"; // green-500
+    if (value < 85) return "#eab308"; // yellow-500
     return "#ef4444"; // red-500
   };
 

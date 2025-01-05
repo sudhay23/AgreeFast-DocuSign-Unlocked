@@ -20,7 +20,21 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        jiggle: {
+          "0%, 100%": { transform: "rotate(0deg)" },
+          "25%": { transform: "rotate(-3deg)" },
+          "75%": { transform: "rotate(3deg)" },
+        },
+      },
+      animation: {
+        jiggle: "jiggle 0.5s ease-in-out infinite",
+      },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("daisyui")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("daisyui"),
+    require("tailwindcss-animate"),
+  ],
 } satisfies Config;

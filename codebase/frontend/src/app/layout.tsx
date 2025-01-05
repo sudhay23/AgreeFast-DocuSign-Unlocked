@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Agreefast",
+  title: "agreefast",
   description: "Overcome agreement traps better",
 };
 
