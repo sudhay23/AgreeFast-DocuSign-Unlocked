@@ -11,8 +11,8 @@ import React from "react";
 export default function RoomPage() {
   const { envelopeId } = useParams();
   return (
-    <main className="w-full h-full flex flex-col flex-1">
-      <div className="mb-5">
+    <main className="w-full h-full flex flex-col flex-1 pt-3">
+      <div className="mb-2">
         <SignStatus signingDate={null} />
       </div>
       <div className="grid grid-cols-6 h-full flex-1 gap-3">

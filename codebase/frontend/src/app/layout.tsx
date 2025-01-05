@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "react-tooltip/dist/react-tooltip.css";
 import { Navbar } from "@/components/Navbar";
+import { OrientationWarning } from "@/components/OrientationWarning";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -12,6 +13,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Agreefast",
   description: "Overcome agreement traps better",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 0.5,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -28,6 +35,7 @@ export default function RootLayout({
         <main className="px-20 pb-10 flex flex-col flex-1 h-full">
           {children}
         </main>
+        <OrientationWarning />
       </body>
     </html>
   );
