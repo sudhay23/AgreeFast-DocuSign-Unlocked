@@ -15,6 +15,11 @@ interface IEvent {
   recurring: string;
 }
 
+interface IAgreement {
+  file_name: string;
+  file_uri: string;
+}
+
 // Define the interface for TypeScript type safety
 export interface IEnvelope extends Document {
   envelope_id: string;
@@ -28,7 +33,8 @@ export interface IEnvelope extends Document {
   signed_on?: Date;
   ics_data?: string;
   knowledge_graph_db_name?: string;
-  agreements: string[];
+  agreements: IAgreement[];
+  ai_processing_complete: boolean;
 }
 
 // Define the schema
@@ -63,7 +69,16 @@ const EnvelopeSchema: Schema = new Schema({
   signed_on: { type: Date },
   ics_data: { type: String },
   knowledge_graph_db_name: { type: String },
-  agreements: { type: [String], required: true },
+  agreements: {
+    type: [
+      {
+        file_name: { type: String },
+        file_uri: { type: String },
+      },
+    ],
+    required: true,
+  },
+  ai_processing_complete: { type: Boolean, required: true, default: false },
 });
 
 // Create the model
