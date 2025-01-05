@@ -107,9 +107,9 @@ export const EnvelopeContents = () => {
     },
   ];
   return (
-    <div className="border-violet border-2 border-opacity-15 p-8 rounded-3xl">
+    <div className="border-violet border-2 border-opacity-15 p-8 rounded-3xl flex">
       <h1 className="text-[16px] font-medium text-black">Envelope Contents</h1>
-      <div className="flex flex-wrap gap-5 justify-center mt-7 p-2 max-h-[150px] w-full overflow-y-auto">
+      <div className="flex flex-wrap gap-5 justify-center items-center mt-7 p-2 max-h-[150px] w-full overflow-y-auto flex-1">
         {files.map((file, idx) => (
           <div key={idx}>
             <Link

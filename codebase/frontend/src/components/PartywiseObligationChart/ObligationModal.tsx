@@ -9,7 +9,7 @@ export const ObligationModal = ({
 }) => {
   return (
     <dialog id="obligations_modal" className="modal bg-white bg-opacity-30">
-      <div className="modal-box bg-white">
+      <div className="modal-box max-w-none w-[70%] bg-white">
         <h1 className="font-medium text-black text-[18px]">
           {activeObligationParty?.count} obligation
           {activeObligationParty?.count !== 1 ? "s" : ""} found
@@ -17,7 +17,7 @@ export const ObligationModal = ({
         <p className="font-regular text-black text-[14px] mt-3 text-opacity-40">
           Party: {activeObligationParty?.role}
         </p>
-        <div className="w-full mt-5 flex flex-col gap-3 max-h-[250px] overflow-y-auto">
+        <div className="w-full mt-5 flex flex-col gap-3 max-h-[60vh] overflow-y-auto">
           {activeObligationParty?.obligations.map((ob, idx) => (
             <div
               className="w-full bg-violet bg-opacity-10 rounded-lg px-4 py-3 flex flex-col items-start gap-4"
