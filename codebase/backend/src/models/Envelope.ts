@@ -30,7 +30,7 @@ export interface IEnvelope extends Document {
   obligation_score?: number;
   obligations?: IObligation[];
   events?: IEvent[];
-  signed_on?: Date;
+  signed_on?: number;
   ics_data?: string;
   knowledge_graph_db_name?: string;
   agreements: IAgreement[];
@@ -68,7 +68,7 @@ const EnvelopeSchema: Schema = new Schema({
     ],
     default: [],
   },
-  signed_on: { type: Date },
+  signed_on: { type: Number },
   ics_data: { type: String },
   agreements: {
     type: [
