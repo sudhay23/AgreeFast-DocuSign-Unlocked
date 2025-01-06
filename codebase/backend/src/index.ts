@@ -9,15 +9,6 @@ import { fileURLToPath } from "url";
 import path from "path";
 import envelopeRoutes from "./routes/envelopeRoutes.js";
 
-dotenv.config({
-  path: path.join(
-    path.dirname(fileURLToPath(import.meta.url)),
-    "..",
-    "..",
-    ".env"
-  ),
-});
-
 // Resolve __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -83,8 +74,8 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/webhook", async (req: Request, res: Response) => {
   // console.log(req.body);
   const type = req.body.event;
-  if (type == "envelope-sent" || type == "envelope-complete") {
-    console.log("type: ", type);
+  console.log("type: ", type);
+  if (type == "envelope-sent") {
     const data = req.body.data;
     const envelope = new Envelope();
     envelope.envelope_id = data.envelopeId;
@@ -113,6 +104,19 @@ app.post("/webhook", async (req: Request, res: Response) => {
         Buffer.from(`{"envelope_id":"${data.envelopeId}"}`)
       );
       console.log(`${data.envelopeId} sent to '${RABBITMQ_QUEUE}'`);
+    }
+  } else if (type == "envelope-completed") {
+    const data = req.body.data;
+    const completedDateTime = Math.floor(
+      new Date(data.envelopeSummary.completedDateTime).getTime() / 1000
+    );
+    const envelope_id = data.envelopeId;
+    const envelope = await Envelope.findOne({ envelope_id });
+    if (envelope) {
+      envelope.signed_on = completedDateTime;
+      await envelope.save();
+    } else {
+      console.log(`Envelope not found with envelope_id: ${envelope_id}`);
     }
   }
   res.sendStatus(200);
