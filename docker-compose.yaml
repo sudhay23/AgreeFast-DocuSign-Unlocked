@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   neo4j:
+    restart: always
     image: neo4j:enterprise
     container_name: neo4j
     ports:
@@ -21,8 +22,8 @@ services:
       - neo4j_plugins:/plugins
 
   rabbitmq:
-    image: rabbitmq:3.12-management
     restart: always
+    image: rabbitmq:3.12-management
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -30,6 +31,33 @@ services:
     volumes:
       - rabbitmq_lib:/var/lib/rabbitmq
       - rabbitmq_log:/var/log/rabbitmq
+
+  backend_api_service:
+    restart: always
+    depends_on:
+      - rabbitmq
+      - ai_service
+      - neo4j
+    build:
+      context: ./codebase/backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    ports:
+      - 5500:5500
+
+  ai_service:
+    restart: always
+    depends_on:
+      - neo4j
+      - rabbitmq
+    build:
+      context: ./codebase/ai_service
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    ports:
+      - 6500:6500
 
 volumes:
   neo4j_data:

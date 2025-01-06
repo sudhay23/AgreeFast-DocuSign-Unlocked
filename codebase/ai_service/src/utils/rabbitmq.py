@@ -6,14 +6,17 @@ from utils.extract_data import extract_events, extract_obligatory_statements, co
 from utils.api import notify_backend_ai_process_completion
 
 async def create_rabbitmq_connection():
-    connection = await aio_pika.connect_robust(os.getenv("RABBITMQ_CONNECTION_STRING"))
-    channel = await connection.channel()
-    queue = await channel.declare_queue(os.getenv("RABBITMQ_WORKER_QUEUE_NAME"), durable=True)
-    await queue.consume(queue_consumer_callback,no_ack=True)
+    try:
+        connection = await aio_pika.connect_robust(os.getenv("RABBITMQ_CONNECTION_STRING"))
+        channel = await connection.channel()
+        queue = await channel.declare_queue(os.getenv("RABBITMQ_WORKER_QUEUE_NAME"), durable=True)
+        await queue.consume(queue_consumer_callback,no_ack=True)
 
-    # Keep the consumer running
-    print("Started RabbitMQ consumer...")
-    await asyncio.Event().wait()
+        # Keep the consumer running
+        print("Started RabbitMQ consumer...")
+        await asyncio.Event().wait()
+    except:
+        exit(1)
 
 async def queue_consumer_callback(message: aio_pika.IncomingMessage):
     async with message.process(ignore_processed=True):
