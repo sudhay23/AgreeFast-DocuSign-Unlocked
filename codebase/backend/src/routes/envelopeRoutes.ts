@@ -159,10 +159,10 @@ router.get(
 
 // TODO: Implement this route
 router.post("/:id/chat", async (req: Request, res: Response): Promise<any> => {
-  const envelope_id = req.params.id;
+  const envelopeId = req.params.id;
   const { user_question } = req.body;
   const response = await axios.post(`${AI_SERVICE_BASE_URL}/chat`, {
-    envelope_id,
+    envelope_id: envelopeId,
     user_question,
   });
   res.json(response.data);
