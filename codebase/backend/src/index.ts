@@ -46,8 +46,10 @@ const connectRabbitMQ = async () => {
   } catch (err) {
     if (err instanceof Error) {
       console.error("Error connecting to RabbitMQ:", err.message);
+      process.exit(1);
     } else {
       console.error("Error connecting to RabbitMQ:", err);
+      process.exit(1);
     }
   }
 };
