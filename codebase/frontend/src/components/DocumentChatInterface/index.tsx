@@ -38,13 +38,13 @@ export const DocumentChatInterface = () => {
   return (
     <>
       <div
-        className={`border-violet border-2 border-opacity-15 py-5 rounded-3xl flex-1 flex flex-col items-start transition-all duration-700 z-20 ${
+        className={`border-violet border-2 border-opacity-15 animate-in zoom-in fade-in duration-1000 py-5 rounded-3xl flex-1 flex flex-col items-start transition-all duration-700 z-20 ${
           animState &&
           "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[80%] h-[90%] transition-all duration-700"
         }`}
       >
-        <div className="w-full flex items-center justify-between px-5">
-          <h1 className="text-[16px] font-medium text-black">
+        <div className="w-full flex items-center justify-between py-3 px-8">
+          <h1 className="text-[16px] font-medium text-black ">
             Chat with your Docusign Envelope
           </h1>
 
@@ -100,7 +100,7 @@ export const DocumentChatInterface = () => {
         </div>
       </div>
       <div
-        className={`absolute w-full h-full bg-black bg-opacity-35 top-0 left-0 transition-all ${
+        className={`absolute w-[102vw] h-[102vh] bg-black bg-opacity-35 top-0 left-0 transition-all ${
           animState ? "z-10 opacity-100" : "-z-10 opacity-0"
         }`}
       ></div>

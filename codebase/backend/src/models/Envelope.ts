@@ -44,7 +44,7 @@ const EnvelopeSchema: Schema = new Schema({
   sender_id: { type: String, required: true },
   sender_email: { type: String, required: true },
   recipients_emails: { type: [String], required: true },
-  compliance_obligatory_score: { type: Number },
+  obligation_score: { type: Number },
   obligations: {
     type: [
       {
@@ -68,7 +68,7 @@ const EnvelopeSchema: Schema = new Schema({
     ],
     default: [],
   },
-  signed_on: { type: Number },
+  signed_on: { type: Number, default: 0 },
   ics_data: { type: String },
   agreements: {
     type: [

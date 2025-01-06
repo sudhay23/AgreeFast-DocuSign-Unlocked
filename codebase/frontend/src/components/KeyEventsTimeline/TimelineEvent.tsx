@@ -2,7 +2,6 @@ import React from "react";
 import { Check, Clock, Calendar, ArrowRight } from "lucide-react";
 import { Event } from "./types";
 import { formatDate, getTimeDifference } from "../../lib/utils";
-import { Tooltip } from "react-tooltip";
 
 interface TimelineEventProps {
   event: Event;
@@ -14,12 +13,12 @@ export function TimelineEvent({ event, onClick, isLast }: TimelineEventProps) {
   const isPast = event.startDate < new Date();
 
   return (
-    <div className="relative flex-shrink-0 w-[280px] animate-slideIn">
+    <div className="relative flex-shrink-0 w-[280px]">
       {/* Timeline connector line */}
       <div className="absolute left-0 right-0 top-[10px] h-0.5 bg-gray-200" />
 
       {/* Timeline node with dot */}
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative flex flex-col items-center">
         <div
           className={`w-5 h-5 rounded-full flex items-center justify-center ${
             isPast
@@ -37,8 +36,8 @@ export function TimelineEvent({ event, onClick, isLast }: TimelineEventProps) {
         {/* Event card */}
         <div
           onClick={onClick}
-          className={`mt-4 w-[260px] p-4 shadow-sm cursor-pointer 
-            transition-all duration-300 hover:shadow-md hover:transform hover:scale-102
+          className={`mt-4 w-[260px] p-4 shadow-sm cursor-pointer animate-in zoom-in duration-1000
+            transition-all hover:shadow-md hover:transform hover:scale-102
             bg-white border-t-2 ${
               isPast ? "border-green-500" : "border-orange-500"
             }`}
