@@ -75,7 +75,7 @@ export const DonutChart = ({
   }
 
   return (
-    <div className="flex flex-col items-center animate-in zoom-in">
+    <div className="flex flex-col items-center  animate-in zoom-in fade-in duration-1000">
       <div className="relative">
         <svg width={size} height={size} className="">
           {processedData.map((segment) => (
