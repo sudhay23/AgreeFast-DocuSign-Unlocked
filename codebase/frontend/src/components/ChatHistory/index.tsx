@@ -93,7 +93,7 @@ export const ChatHistory = ({
               <td className="border border-border px-4 py-2">{children}</td>
             ),
           }}
-          className="p-4 bg-violet bg-opacity-5 rounded-2xl text-[14px] text-black text-opacity-80"
+          className="p-4 border-violet border-2 border-opacity-15 animate-in zoom-in fade-in duration-1000 rounded-2xl text-[14px] text-black text-opacity-80"
         >
           {message}
         </ReactMarkdown>

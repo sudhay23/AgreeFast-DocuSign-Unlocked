@@ -119,7 +119,45 @@ router.get(
       if (!envelope) {
         return res.status(404).json({ message: "Envelope not found" });
       }
-      res.json({ obligation_score: envelope.obligation_score });
+      res.json({
+        obligation_score: envelope.obligation_score,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server Error" });
+    }
+  }
+);
+router.get(
+  "/:id/getObligations",
+  async (req: Request, res: Response): Promise<any> => {
+    const envelopeId = req.params.id;
+    try {
+      const envelope = await Envelope.findOne({ envelope_id: envelopeId });
+      if (!envelope) {
+        return res.status(404).json({ message: "Envelope not found" });
+      }
+      res.json({
+        obligations: envelope.obligations,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server Error" });
+    }
+  }
+);
+router.get(
+  "/:id/getSignedDate",
+  async (req: Request, res: Response): Promise<any> => {
+    const envelopeId = req.params.id;
+    try {
+      const envelope = await Envelope.findOne({ envelope_id: envelopeId });
+      if (!envelope) {
+        return res.status(404).json({ message: "Envelope not found" });
+      }
+      res.json({
+        signed_on: envelope.signed_on,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server Error" });

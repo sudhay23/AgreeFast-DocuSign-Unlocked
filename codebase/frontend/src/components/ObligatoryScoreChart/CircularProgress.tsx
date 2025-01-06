@@ -26,7 +26,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
   };
 
   return (
-    <div className="relative inline-flex items-center justify-center animate-fadeIn">
+    <div className="relative inline-flex items-center justify-center animate-in zoom-in fade-in duration-1000">
       <svg
         className="transform -rotate-90 animate-scaleIn"
         width={size}

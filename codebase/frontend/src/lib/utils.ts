@@ -2,22 +2,37 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Event } from "../components/KeyEventsTimeline/types";
 
-export function parseICSContent(icsContent: string): Event[] {
+export const parseICSContent = (icsContent: string): Event[] => {
+  const lines = icsContent.split("\n").filter((line) => line.trim());
+
   const events: Event[] = [];
-  const lines = icsContent.split("\n");
-  let currentEvent: Partial<Event> | null = null;
+  let currentEvent: Partial<Event> = {};
+  let inEvent = false;
+  let inAlarm = false;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+  lines.forEach((line) => {
+    const trimmedLine = line.trim();
 
-    if (line === "BEGIN:VEVENT") {
+    if (trimmedLine === "BEGIN:VEVENT") {
       currentEvent = {};
-    } else if (line === "END:VEVENT" && currentEvent) {
-      events.push(currentEvent as Event);
-      currentEvent = null;
-    } else if (currentEvent) {
-      const [key, ...values] = line.split(":");
-      const value = values.join(":");
+      inEvent = true;
+    } else if (trimmedLine === "END:VEVENT") {
+      if (
+        currentEvent.summary &&
+        currentEvent.startDate &&
+        currentEvent.endDate &&
+        currentEvent.description
+      ) {
+        events.push(currentEvent as Event);
+      }
+      inEvent = false;
+    } else if (trimmedLine === "BEGIN:VALARM") {
+      inAlarm = true;
+    } else if (trimmedLine === "END:VALARM") {
+      inAlarm = false;
+    } else if (inEvent && !inAlarm) {
+      const [key, ...values] = trimmedLine.split(":");
+      const value = values.join(":"); // Rejoin in case description contains colons
 
       switch (key) {
         case "SUMMARY":
@@ -25,12 +40,20 @@ export function parseICSContent(icsContent: string): Event[] {
           break;
         case "DTSTART;VALUE=DATE":
           currentEvent.startDate = new Date(
-            value.slice(0, 4) + "-" + value.slice(4, 6) + "-" + value.slice(6)
+            value.substring(0, 4) +
+              "-" +
+              value.substring(4, 6) +
+              "-" +
+              value.substring(6, 8)
           );
           break;
         case "DTEND;VALUE=DATE":
           currentEvent.endDate = new Date(
-            value.slice(0, 4) + "-" + value.slice(4, 6) + "-" + value.slice(6)
+            value.substring(0, 4) +
+              "-" +
+              value.substring(4, 6) +
+              "-" +
+              value.substring(6, 8)
           );
           break;
         case "DESCRIPTION":
@@ -38,10 +61,11 @@ export function parseICSContent(icsContent: string): Event[] {
           break;
       }
     }
-  }
+  });
 
   return events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
-}
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
