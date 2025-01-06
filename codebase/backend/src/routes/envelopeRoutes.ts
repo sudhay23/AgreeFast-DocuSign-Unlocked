@@ -199,11 +199,16 @@ router.get(
 router.post("/:id/chat", async (req: Request, res: Response): Promise<any> => {
   const envelopeId = req.params.id;
   const { user_question } = req.body;
-  const response = await axios.post(`${AI_SERVICE_BASE_URL}/chat`, {
-    envelope_id: envelopeId,
-    user_question,
-  });
-  res.json(response.data);
+  try {
+    const response = await axios.post(`${AI_SERVICE_BASE_URL}/chat`, {
+      envelope_id: envelopeId,
+      user_question,
+    });
+    res.json(response.data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "An error occurred" });
+  }
 });
 
 router.post(

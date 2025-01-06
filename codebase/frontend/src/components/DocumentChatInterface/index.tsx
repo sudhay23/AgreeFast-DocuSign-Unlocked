@@ -3,8 +3,14 @@ import React, { useEffect, useState } from "react";
 import { ChatHistory } from "../ChatHistory";
 import { Chat } from "../ChatHistory/types";
 import { MultiplicationSignIcon } from "hugeicons-react";
+import axios from "axios";
+import { appConfig } from "@/config/config";
 
-export const DocumentChatInterface = () => {
+export const DocumentChatInterface = ({
+  envelopeId,
+}: {
+  envelopeId: string;
+}) => {
   const [prompt, setPrompt] = useState<string>("");
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(false);
@@ -12,8 +18,13 @@ export const DocumentChatInterface = () => {
   const chatWithBot = async (prompt: string) => {
     try {
       setLoading(true);
-      const responseChat =
-        "### Service Fee Conditions\n\n| **Condition**                                                                 | **Service Fee Rate**                                                                                                           |\n|-------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|\n| For Combined Products with **≥ 90% Tally Content**                            | 14.2% of Tally's direct selling price to customer or Tally Channel Partners' actual distributor cost for BuyCo ARC Customers. |\n| For Combined Products with **≥ 75% and < 90% Tally Content**                  | 3.3% of Tally's direct selling price to customer or Tally Channel Partners' actual distributor cost for BuyCo ARC Customers.  |\n| For Combined Products with **≥ 65% and < 75% Tally Content**                  | 3.2% of Tally's direct selling price to customer or Tally Channel Partners' actual distributor cost for BuyCo ARC Customers.  |\n| For Combined Products with **≥ 50% and < 65% Tally Content**                  | 2.9% of Tally's direct selling price to customer or Tally Channel Partners' actual distributor cost for BuyCo ARC Customers.  |\n| For Combined Products with **≥ 25% and < 50% Tally Content**                  | 2.3% of Tally's direct selling price to customer or Tally Channel Partners' actual distributor cost for BuyCo ARC Customers.  |\n\n---\n\n### Non-Disclosure Agreement (NDA) Duration\n\nThe NDA is effective **from June 7, 2023**, but its specific duration is not mentioned in the provided context.\n\n";
+      const response = await axios.post(
+        `${appConfig.backendUrl}/api/envelope/${envelopeId}/chat`,
+        {
+          user_question: prompt,
+        }
+      );
+      const data = response.data;
       setChats((prev: any) => [
         ...prev,
         {
@@ -22,12 +33,13 @@ export const DocumentChatInterface = () => {
         },
         {
           role: "assistant",
-          message: responseChat,
+          message: data.response,
         },
       ]);
       setPrompt("");
       setLoading(false);
     } catch (err) {
+      console.log(err);
       setPrompt("");
       setLoading(false);
     }
@@ -38,7 +50,7 @@ export const DocumentChatInterface = () => {
   return (
     <>
       <div
-        className={`border-violet border-2 border-opacity-15 animate-in zoom-in fade-in duration-1000 py-5 rounded-3xl flex-1 flex flex-col items-start transition-all duration-700 z-20 ${
+        className={`border-violet border-2 border-opacity-15 animate-in zoom-in fade-in duration-1000 py-5 rounded-3xl flex-1 flex flex-col items-start transition-all z-20 ${
           animState &&
           "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[80%] h-[90%] transition-all duration-700"
         }`}

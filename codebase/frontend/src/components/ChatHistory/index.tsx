@@ -44,6 +44,7 @@ export const ChatHistory = ({
   };
 
   const AssistantChatBubble = ({ message }: { message: string }) => {
+    console.log("i");
     return (
       <div className="flex items-start gap-3 w-[80%] self-start">
         <div className="rounded-full min-w-[30px] min-h-[30px] border">
@@ -93,7 +94,7 @@ export const ChatHistory = ({
               <td className="border border-border px-4 py-2">{children}</td>
             ),
           }}
-          className="p-4 border-violet border-2 border-opacity-15 animate-in zoom-in fade-in duration-1000 rounded-2xl text-[14px] text-black text-opacity-80"
+          className="p-4 bg-violet bg-opacity-15 rounded-2xl text-[14px] text-black text-opacity-80"
         >
           {message}
         </ReactMarkdown>
@@ -122,33 +123,52 @@ export const ChatHistory = ({
   if (chats.length === 0)
     return (
       <div className="flex-1 h-full flex flex-col items-center justify-center">
-        <h1 className="text-black font-regular text-[20px] text-opacity-60 text-center">
-          Ask <span className="text-violet">agreefast</span> questions about
-          your envelope
-        </h1>
-        {question1.length > 0 && question2.length > 0 ? (
-          <div className="flex items-center gap-5 flex-wrap justify-start mt-10">
-            <button
-              className="flex flex-col items-start gap-2 border-2 border-violet border-opacity-50 rounded-xl w-[150px] text-[14px] font-medium p-2 hover:bg-violet hover:bg-opacity-15 transition-all hover:transition-all"
-              onClick={() => chatWithSamplePrompt(question1)}
-            >
-              <SparklesIcon size={20} className="text-purple" />
-              <p className="text-black text-opacity-50 text-left">
-                {question1}{" "}
-              </p>
-            </button>
-            <button
-              className="flex flex-col items-start gap-2 border-2 border-violet border-opacity-50 rounded-xl w-[150px] text-[14px] font-medium p-2 hover:bg-violet hover:bg-opacity-15 transition-all hover:transition-all"
-              onClick={() => chatWithSamplePrompt(question2)}
-            >
-              <SparklesIcon size={20} className="text-purple" />
-              <p className="text-black text-opacity-50 text-left">
-                {question2}{" "}
-              </p>
-            </button>
+        {loading ? (
+          <div className="flex flex-col items-center gap-5">
+            <div className="rounded-full min-w-[30px] min-h-[30px] border">
+              <Image
+                src={"/logo.png"}
+                width={30}
+                height={30}
+                alt="agreefast logo"
+              />
+            </div>
+            <p className="font-regular text-black text-opacity-40">
+              <span className="text-violet">agreefast</span> is thinking
+            </p>
+            <span className="loading loading-dots loading-md text-violet"></span>
           </div>
         ) : (
-          <></>
+          <>
+            <h1 className="text-black font-regular text-[20px] text-opacity-60 text-center">
+              Ask <span className="text-violet">agreefast</span> questions about
+              your envelope
+            </h1>
+            {question1.length > 0 && question2.length > 0 ? (
+              <div className="flex items-center gap-5 flex-wrap justify-start mt-10">
+                <button
+                  className="flex flex-col items-start gap-2 border-2 border-violet border-opacity-50 rounded-xl w-[150px] text-[14px] font-medium p-2 hover:bg-violet hover:bg-opacity-15 transition-all hover:transition-all"
+                  onClick={() => chatWithSamplePrompt(question1)}
+                >
+                  <SparklesIcon size={20} className="text-purple" />
+                  <p className="text-black text-opacity-50 text-left">
+                    {question1}{" "}
+                  </p>
+                </button>
+                <button
+                  className="flex flex-col items-start gap-2 border-2 border-violet border-opacity-50 rounded-xl w-[150px] text-[14px] font-medium p-2 hover:bg-violet hover:bg-opacity-15 transition-all hover:transition-all"
+                  onClick={() => chatWithSamplePrompt(question2)}
+                >
+                  <SparklesIcon size={20} className="text-purple" />
+                  <p className="text-black text-opacity-50 text-left">
+                    {question2}{" "}
+                  </p>
+                </button>
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
         )}
       </div>
     );
@@ -159,9 +179,15 @@ export const ChatHistory = ({
         ref={chatContainerRef}
       >
         {chats.map((chat, idx) => {
-          if (chat.role === "assistant")
-            return <AssistantChatBubble message={chat.message} key={idx} />;
-          return <HumanChatBubble message={chat.message} key={idx} />;
+          return (
+            <>
+              {chat.role === "assistant" ? (
+                <AssistantChatBubble message={chat.message} key={idx} />
+              ) : (
+                <HumanChatBubble message={chat.message} key={idx} />
+              )}
+            </>
+          );
         })}
         {loading && (
           <span className="loading loading-dots loading-md text-violet"></span>
