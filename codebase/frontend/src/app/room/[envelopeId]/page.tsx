@@ -38,7 +38,7 @@ export default function RoomPage() {
           </div>
         </div>
         <div className="col-span-2 flex">
-          <DocumentChatInterface />
+          <DocumentChatInterface envelopeId={envelopeId as string} />
         </div>
       </div>
     </main>
