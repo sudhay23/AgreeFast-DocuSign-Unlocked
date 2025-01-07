@@ -63,13 +63,123 @@ router.get(
         from: process.env.EMAIL_USER,
         to: envelope.recipients_emails.join(","),
         cc: envelope.sender_email,
-        subject: "Envelope Activated",
-        text: `Dear User,
+        subject: "Activated agreefast dashboard",
+        text: `
+        <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        font-family: "Arial", sans-serif;
+        line-height: 1.6;
+        color: #333333;
+      }
+      .logo {
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo img {
+        width: 70px;
+      }
+      .envelope-id {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 4px solid #0066cc;
+      }
+      .action-button {
+        display: inline-block;
+        padding: 12px 28px;
+        margin: 25px 0;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        background-color: #28a745;
+        color: white;
+        transition: all 0.3s ease;
+      }
+      .action-button:hover {
+        background-color: #218838;
+      }
+      .dashboard-link {
+        border-radius: 8px;
+        margin: 20px 0;
+        word-break: break-all;
+      }
+      .signature {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        color: #666666;
+      }
+      h1 {
+        color: black;
+        text-align: center;
+        font-size: 24px;
+        padding-top: 0;
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="logo">
+        <img
+          src="${process.env.FRONTEND_BASE_URL}/static/logo.png"
+          alt="AgreeFast Logo"
+        />
+        <h1>agreefast</h1>
+      </div>
 
-Your envelope with ID: ${envelopeId} has been activated.
+      <p>Dear valued client,</p>
 
-Best regards,
-AgreeFast Team`,
+      <p>
+        Great news! Your agreefast dashboard has been successfully activated.
+      </p>
+
+      <div class="envelope-id"><strong>Envelope ID:</strong> ${envelopeId}</div>
+
+      <p>You now have access to:</p>
+      <ul style="padding-left: 20px; color: #444444">
+        <li>Comprehensive document analytics</li>
+        <li>Smart insights and recommendations</li>
+        <li>Advanced agreement tracking</li>
+      </ul>
+
+      <p>Access your customized dashboard here:</p>
+      <div class="dashboard-link">
+        <a
+          href="${process.env.FRONTEND_BASE_URL}/room/${envelopeId}"
+          class="action-button"
+        >
+          Access Dashboard
+        </a>
+      </div>
+      <div class="signature">
+        <p>
+          Best regards,<br />
+          The agreefast team
+        </p>
+        <small
+          >This is an automated message. Please do not reply directly to this
+          email.</small
+        >
+      </div>
+    </div>
+  </body>
+</html>
+
+        `,
       };
 
       try {
@@ -83,7 +193,9 @@ AgreeFast Team`,
       } catch (err) {
         console.log(err);
       }
-      res.json({ message: "Envelope activated, you can close this tab!" });
+      res.json({
+        message: "agreefast features activated, you can now close this tab.",
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server Error" });
@@ -228,19 +340,157 @@ router.post(
         to: envelope.sender_email,
         subject: "AI Processing Complete (Activate/Deactivate)",
         html: `
-    <p>Dear User,</p>
-    <p>Your envelope with ID: <strong>${envelopeId}</strong> has completed the AI processing.</p>
-    <p>Click on the buttons below to activate or deactivate:</p>
-    <a href="${process.env.DEPLOYED_BACKEND_URL}/api/envelope/${envelopeId}/activate" 
-       style="display: inline-block; padding: 10px 20px; margin-right: 10px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
-      Activate
-    </a>
-    <a href="${process.env.DEPLOYED_BACKEND_URL}/api/envelope/${envelopeId}/deactivate" 
-       style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px;">
-      Deactivate
-    </a>
-    <p>Best regards,</p>
-    <p>AgreeFast Team</p>
+  <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        font-family: "Arial", sans-serif;
+        line-height: 1.6;
+        color: #333333;
+      }
+      .logo {
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo img {
+        width: 70px;
+      }
+
+      .envelope-id {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 4px solid #0066cc;
+      }
+      .button-container {
+        margin: 30px 0;
+        text-align: center;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 28px;
+        margin: 0 10px;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .activate-btn {
+        background-color: #28a745;
+        color: white;
+        border: 3px solid #28a745;
+        color: white;
+        border-radius: 15px;
+        font-weight: 100;
+      }
+      .activate-btn:hover {
+        background-color: #218838;
+        border-color: #218838;
+      }
+      .deactivate-btn {
+        border: 3px solid #dc3545;
+        color: red;
+        border-radius: 15px;
+        font-weight: 100;
+      }
+      .deactivate-btn:hover {
+        background-color: #dc3545;
+        color: white;
+      }
+      .signature {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        color: #666666;
+      }
+      h1 {
+        color: black;
+        text-align: center;
+        font-size: 24px;
+        padding-top: 0;
+        margin-top: 0;
+      }
+      span {
+        font-weight: 900;
+      }
+      .end {
+        margin-top: 50px;
+      }
+      .end p {
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="logo">
+        <img src="${process.env.FRONTEND_BASE_URL}/static/logo.png" alt="AgreeFast Logo" />
+        <h1>agreefast</h1>
+      </div>
+
+      <p>Dear valued client,</p>
+
+      <p>
+        We hope this email finds you well. We're pleased to inform you that the
+        AI processing for your document has been successfully completed.
+      </p>
+
+      <div class="envelope-id"><strong>Envelope ID:</strong> ${envelopeId}</div>
+      <p>
+        To be able to use the <span>agreefast</span> dashboard for this
+        envelope, please select one of the following options:
+      </p>
+
+      <div class="button-container">
+        <a
+          href="${process.env.BACKEND_BASE_URL}/api/envelope/${envelopeId}/activate"
+          class="button activate-btn"
+        >
+          Activate <span>agreefast</span>
+        </a>
+        <a
+          href="${process.env.BACKEND_BASE_URL}/api/envelope/${envelopeId}/deactivate"
+          class="button deactivate-btn"
+        >
+          Deactivate <span>agreefast</span>
+        </a>
+        <div class="end">
+          <p>
+            Upon activation, recipients of the Docusign agreement will receive
+            their links to the customized <span>agreefast</span> dashboard
+            opening up access to smart document analysis features.
+          </p>
+          <p>
+            As the agreement sender, feel free to deactivate the
+            <span>agreefast</span> dashboard any time using this email.
+          </p>
+        </div>
+      </div>
+      <div class="signature">
+        <p>
+          Best regards,<br />
+          The <span>agreefast</span> team
+        </p>
+        <small
+          >This is an automated message. Please do not reply directly to this
+          email.</small
+        >
+      </div>
+    </div>
+  </body>
+</html>
+
   `,
       };
 
