@@ -18,7 +18,7 @@ export const ObligatoryScoreChart = ({
           `${appConfig.backendUrl}/api/envelope/${envelopeId}/getObligationScore`
         );
         const data = response.data;
-        setPercentage(Math.round(data.obligation_score));
+        setPercentage(Math.round(data.compliance_obligatory_score));
         setLoading(false);
       } catch (err) {
         console.log(err);

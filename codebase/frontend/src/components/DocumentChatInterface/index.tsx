@@ -1,8 +1,8 @@
 import { SendIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChatHistory } from "../ChatHistory";
 import { Chat } from "../ChatHistory/types";
-import { MultiplicationSignIcon } from "hugeicons-react";
+import { ArrowExpand01Icon, MultiplicationSignIcon } from "hugeicons-react";
 import axios from "axios";
 import { appConfig } from "@/config/config";
 
@@ -14,10 +14,16 @@ export const DocumentChatInterface = ({
   const [prompt, setPrompt] = useState<string>("");
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(false);
+  const chatContainerRef = useRef<any>(null);
 
   const chatWithBot = async (prompt: string) => {
     try {
       setLoading(true);
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop =
+          chatContainerRef.current.scrollHeight;
+      }
+      setPrompt("");
       const response = await axios.post(
         `${appConfig.backendUrl}/api/envelope/${envelopeId}/chat`,
         {
@@ -36,7 +42,6 @@ export const DocumentChatInterface = ({
           message: data.response,
         },
       ]);
-      setPrompt("");
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -60,7 +65,7 @@ export const DocumentChatInterface = ({
             Chat with your Docusign Envelope
           </h1>
 
-          {animState && (
+          {animState ? (
             <button
               onClick={() => {
                 setAnimState(false);
@@ -68,6 +73,15 @@ export const DocumentChatInterface = ({
               className="hover:opacity-80"
             >
               <MultiplicationSignIcon className="text-red-600" size={35} />
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setAnimState(true);
+              }}
+              className="hover:opacity-80"
+            >
+              <ArrowExpand01Icon className="text-black opacity-50" size={20} />
             </button>
           )}
         </div>
@@ -79,6 +93,7 @@ export const DocumentChatInterface = ({
             loading={loading}
             animState={animState}
             setAnimState={setAnimState}
+            chatContainerRef={chatContainerRef}
           />
           <form
             className="w-full relative"
@@ -94,7 +109,7 @@ export const DocumentChatInterface = ({
             }}
           >
             <input
-              className="w-full rounded-badge text-black text-opacity-60 bg-black bg-opacity-10 outline-none border-none px-3 py-2 pr-11"
+              className="w-full rounded-badge text-black text-opacity-60 bg-black bg-opacity-10 outline-none border-none px-5 text-[14px] py-2 pr-11"
               value={prompt}
               placeholder="Type your query here"
               onChange={(e) => {
@@ -103,9 +118,9 @@ export const DocumentChatInterface = ({
             />
             <button>
               <SendIcon
-                size={20}
+                size={15}
                 strokeWidth={2}
-                className="text-black absolute right-3 bottom-3 hover:opacity-50 transition-all hover:transition-all"
+                className="text-black absolute right-5 bottom-3 hover:opacity-50 transition-all hover:transition-all"
               />
             </button>
           </form>
