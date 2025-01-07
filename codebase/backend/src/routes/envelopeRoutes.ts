@@ -231,11 +231,11 @@ router.post(
     <p>Dear User,</p>
     <p>Your envelope with ID: <strong>${envelopeId}</strong> has completed the AI processing.</p>
     <p>Click on the buttons below to activate or deactivate:</p>
-    <a href="https://poetic-badger-optimum.ngrok-free.app/api/envelope/${envelopeId}/activate" 
+    <a href="${process.env.DEPLOYED_BACKEND_URL}/api/envelope/${envelopeId}/activate" 
        style="display: inline-block; padding: 10px 20px; margin-right: 10px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
       Activate
     </a>
-    <a href="https://poetic-badger-optimum.ngrok-free.app/api/envelope/${envelopeId}/deactivate" 
+    <a href="${process.env.DEPLOYED_BACKEND_URL}/api/envelope/${envelopeId}/deactivate" 
        style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px;">
       Deactivate
     </a>
