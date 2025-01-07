@@ -6,13 +6,32 @@ import { KeyEventsTimeline } from "@/components/KeyEventsTimeline";
 import { ObligatoryScoreChart } from "@/components/ObligatoryScoreChart";
 import { PartywiseObligationChart } from "@/components/PartywiseObligationChart";
 import { SignStatus } from "@/components/SignStatus";
+import { appConfig } from "@/config/config";
+import axios from "axios";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function RoomPage() {
   const { envelopeId } = useParams();
-  const isActivated = true;
-  const [loading, setLoading] = useState(false);
+  const [activated, setActivated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${appConfig.backendUrl}/api/envelope/${envelopeId}/getActivationStatus`
+        );
+        const data = response.data;
+        setActivated(data.isActive);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   if (loading)
     return (
@@ -20,7 +39,7 @@ export default function RoomPage() {
         <span className="loading loading-dots loading-lg text-violet"></span>
       </main>
     );
-  if (!isActivated) return <ActivationWarning />;
+  if (!activated) return <ActivationWarning />;
   return (
     <main className="w-full h-full flex flex-col flex-1 pt-3">
       <div className="mb-2">

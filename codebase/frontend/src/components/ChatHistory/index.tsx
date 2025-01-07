@@ -12,12 +12,14 @@ export const ChatHistory = ({
   loading,
   animState,
   setAnimState,
+  chatContainerRef,
 }: {
   chats: Chat[];
   chatWithBot: any;
   loading: boolean;
   animState: boolean;
   setAnimState: any;
+  chatContainerRef: any;
 }) => {
   const searchParams = useSearchParams();
 
@@ -44,10 +46,9 @@ export const ChatHistory = ({
   };
 
   const AssistantChatBubble = ({ message }: { message: string }) => {
-    console.log("i");
     return (
       <div className="flex items-start gap-3 w-[80%] self-start">
-        <div className="rounded-full min-w-[30px] min-h-[30px] border">
+        <div className="rounded-full min-w-[30px] border">
           <Image
             src={"/logo.png"}
             width={30}
@@ -59,25 +60,25 @@ export const ChatHistory = ({
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ children }) => (
-              <h1 className="text-3xl font-bold mt-8 mb-4">{children}</h1>
+              <h1 className="text-3xl font-bold mt-8 ">{children}</h1>
             ),
             h2: ({ children }) => (
-              <h2 className="text-2xl font-bold mt-6 mb-4">{children}</h2>
+              <h2 className="text-2xl font-bold mt-6 ">{children}</h2>
             ),
             h3: ({ children }) => (
               <h3 className="text-xl font-bold mt-4 mb-2">{children}</h3>
             ),
-            p: ({ children }) => <p className="mb-4 leading-7">{children}</p>,
+            p: ({ children }) => <p className=" leading-7">{children}</p>,
             ul: ({ children }) => (
-              <ul className="list-disc pl-6 mb-4 space-y-2">{children}</ul>
+              <ul className="list-disc pl-6  space-y-2">{children}</ul>
             ),
             ol: ({ children }) => (
-              <ol className="list-decimal pl-6 mb-4 space-y-2">{children}</ol>
+              <ol className="list-decimal pl-6  space-y-2">{children}</ol>
             ),
             li: ({ children }) => <li className="leading-7">{children}</li>,
             table: ({ children }) => (
               <div className="overflow-x-auto mb-6">
-                <table className="min-w-full border-collapse border border-border">
+                <table className="min-w-full border-collapse border border-border border-black border-opacity-15">
                   {children}
                 </table>
               </div>
@@ -86,12 +87,14 @@ export const ChatHistory = ({
               <thead className="bg-muted">{children}</thead>
             ),
             th: ({ children }) => (
-              <th className="border border-border px-4 py-2 text-left font-semibold">
+              <th className="border border-border border-black border-opacity-15 px-4 py-2 text-left font-semibold">
                 {children}
               </th>
             ),
             td: ({ children }) => (
-              <td className="border border-border px-4 py-2">{children}</td>
+              <td className="border border-border border-black border-opacity-15 px-4 py-2">
+                {children}
+              </td>
             ),
           }}
           className="p-4 bg-violet bg-opacity-15 rounded-2xl text-[14px] text-black text-opacity-80"
@@ -110,15 +113,6 @@ export const ChatHistory = ({
       </div>
     );
   };
-
-  const chatContainerRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-  }, [chats]);
 
   if (chats.length === 0)
     return (
@@ -189,9 +183,11 @@ export const ChatHistory = ({
             </>
           );
         })}
-        {loading && (
-          <span className="loading loading-dots loading-md text-violet"></span>
-        )}
+        <span
+          className={`loading loading-dots loading-md text-violet ${
+            loading ? "opacity-100" : "opacity-0"
+          }`}
+        ></span>
       </div>
     </div>
   );

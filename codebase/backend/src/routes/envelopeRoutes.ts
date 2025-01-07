@@ -120,7 +120,7 @@ router.get(
         return res.status(404).json({ message: "Envelope not found" });
       }
       res.json({
-        obligation_score: envelope.obligation_score,
+        compliance_obligatory_score: envelope.compliance_obligatory_score,
       });
     } catch (error) {
       console.error(error);
