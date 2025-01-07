@@ -48,7 +48,7 @@ router.get(
   }
 );
 
-router.put(
+router.get(
   "/:id/activate",
   async (req: Request, res: Response): Promise<any> => {
     const envelopeId = req.params.id;
@@ -83,7 +83,7 @@ AgreeFast Team`,
       } catch (err) {
         console.log(err);
       }
-      res.json({ message: "Envelope activated" });
+      res.json({ message: "Envelope activated, you can close this tab!" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server Error" });
@@ -91,7 +91,7 @@ AgreeFast Team`,
   }
 );
 
-router.put(
+router.get(
   "/:id/deactivate",
   async (req: Request, res: Response): Promise<any> => {
     const envelopeId = req.params.id;
@@ -102,7 +102,7 @@ router.put(
       }
       envelope.is_active = false;
       await envelope.save();
-      res.json({ message: "Envelope deactivated" });
+      res.json({ message: "Envelope deactivated, you can close this tab!" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server Error" });
@@ -227,12 +227,21 @@ router.post(
         from: process.env.EMAIL_USER,
         to: envelope.sender_email,
         subject: "AI Processing Complete (Activate/Deactivate)",
-        text: `Dear User,
-
-Your envelope with ID: ${envelopeId} has completed the AI processing.
-
-Best regards,
-AgreeFast Team`,
+        html: `
+    <p>Dear User,</p>
+    <p>Your envelope with ID: <strong>${envelopeId}</strong> has completed the AI processing.</p>
+    <p>Click on the buttons below to activate or deactivate:</p>
+    <a href="https://poetic-badger-optimum.ngrok-free.app/api/envelope/${envelopeId}/activate" 
+       style="display: inline-block; padding: 10px 20px; margin-right: 10px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
+      Activate
+    </a>
+    <a href="https://poetic-badger-optimum.ngrok-free.app/api/envelope/${envelopeId}/deactivate" 
+       style="display: inline-block; padding: 10px 20px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px;">
+      Deactivate
+    </a>
+    <p>Best regards,</p>
+    <p>AgreeFast Team</p>
+  `,
       };
 
       try {
