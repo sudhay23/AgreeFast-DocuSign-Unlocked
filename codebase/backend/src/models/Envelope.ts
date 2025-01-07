@@ -27,7 +27,7 @@ export interface IEnvelope extends Document {
   sender_id: string;
   sender_email: string;
   recipients_emails: string[];
-  obligation_score?: number;
+  compliance_obligatory_score?: number;
   obligations?: IObligation[];
   events?: IEvent[];
   signed_on?: number;
@@ -68,7 +68,7 @@ const EnvelopeSchema: Schema = new Schema({
     ],
     default: [],
   },
-  signed_on: { type: Number },
+  signed_on: { type: Number, default: 0 },
   ics_data: { type: String },
   agreements: {
     type: [
