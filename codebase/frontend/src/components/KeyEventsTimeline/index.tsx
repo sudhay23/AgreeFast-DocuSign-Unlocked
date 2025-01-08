@@ -39,7 +39,7 @@ export const KeyEventsTimeline = ({ envelopeId }: { envelopeId: string }) => {
   }, [ics]);
 
   return (
-    <div className="border-violet border-2 border-opacity-15 animate-in zoom-in fade-in duration-1000 p-8 rounded-3xl flex-1">
+    <div className="border-violet border-2 border-opacity-25 animate-in zoom-in fade-in duration-1000 p-8 rounded-3xl flex-1">
       <div className="w-full flex justify-between items-center">
         <h1 className="text-[16px] font-medium text-black">Key events</h1>
         {loading ? (
@@ -78,10 +78,10 @@ export const KeyEventsTimeline = ({ envelopeId }: { envelopeId: string }) => {
       <div className="flex items-center gap-2 mt-3">
         <CursorMagicSelection02Icon
           strokeWidth={2}
-          className="text-violet text-opacity-50"
+          className="text-violet text-opacity-80"
           size={20}
         />
-        <p className="text-violet text-opacity-50 text-[14px]">
+        <p className="text-violet text-opacity-80 text-[14px]">
           Click on each event to see more details
         </p>
       </div>

@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        violet: "#8F00FF",
+        violet: "#0099ff",
         white: "#FFFFFF",
         purple: "#CC00FF",
         black: "#000000",
