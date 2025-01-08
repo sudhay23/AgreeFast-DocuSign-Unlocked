@@ -1,0 +1,155 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.css" />
+    <style>
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      body,
+      #auth {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+      }
+
+      .hide {
+        display: none;
+        opacity: 0;
+        height: 0px;
+        z-index: -10;
+      }
+
+      #final label {
+        text-align: center;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+      }
+
+      div {
+        width: 100%;
+      }
+
+      div:nth-child(2) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #loading {
+        margin-top: 50px;
+      }
+
+      .loader {
+        width: 15px;
+        aspect-ratio: 1;
+        position: relative;
+      }
+      .loader::before,
+      .loader::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: #000;
+      }
+      .loader::before {
+        box-shadow: -25px 0;
+        animation: l8-1 1s infinite linear;
+      }
+      .loader::after {
+        transform: rotate(0deg) translateX(25px);
+        animation: l8-2 1s infinite linear;
+      }
+
+      @keyframes l8-1 {
+        100% {
+          transform: translateX(25px);
+        }
+      }
+      @keyframes l8-2 {
+        100% {
+          transform: rotate(-180deg) translateX(25px);
+        }
+      }
+    </style>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  </head>
+  <body>
+    <div id="auth">
+      <div id="imp">
+        <label>Enter Docusign Envelope ID</label>
+        <form id="envelope">
+          <input type="text" />
+          <button type="submit" class="mod-primary">Done</button>
+        </form>
+      </div>
+      <div id="loading">
+        <div class="loader hide"></div>
+      </div>
+      <div id="final" class="hide">
+        <label>Please refresh the page</label>
+      </div>
+    </div>
+    <script>
+      var t = window.TrelloPowerUp.iframe({
+        appKey: "392bf5fb0f36566b3a6b4650be628e92",
+        appName: "agreefast for Docusign",
+        appAuthor: "agreefast",
+      });
+      t.render(function () {
+        t.getRestApi()
+          .isAuthorized()
+          .then(function (isAuthorized) {
+            console.log("Successfully authorized");
+          });
+      });
+
+      const form = document.querySelector("form");
+      const envelopeId = document.querySelector("input");
+      const imp = document.getElementById("imp");
+      const loading = document.querySelector("#loading div");
+      const final = document.getElementById("final");
+      const auth = document.getElementById("auth");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const envId = envelopeId.value;
+
+        loading.classList.remove("hide");
+        imp.classList.add("hide");
+
+        // do stuff...
+
+        t.getRestApi()
+          .getToken()
+          .then(function (token) {
+            if (!token) {
+              // do auth instead
+              t.getRestApi()
+                .authorize({ scope: "read,write" })
+                .then(function (t) {
+                  console.log("done");
+                  loading.classList.add("hide");
+                  imp.classList.remove("hide");
+                });
+            } else {
+              auth.classList.remove("hide");
+              // make a request to our backend with token
+              console.log(token, "TII");
+
+              loading.classList.add("hide");
+              final.classList.remove("hide");
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
