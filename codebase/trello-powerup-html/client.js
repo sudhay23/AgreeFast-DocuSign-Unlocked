@@ -1,12 +1,17 @@
 var WHITE_ICON =
-  "https://5c72-49-206-116-118.ngrok-free.app/codebase/trello-powerup-html/icon.png";
+  "https://2701-49-206-116-118.ngrok-free.app/codebase/trello-powerup-html/icon.png";
 var BLACK_ICON =
-  "https://5c72-49-206-116-118.ngrok-free.app/codebase/trello-powerup-html/icon.png";
+  "https://2701-49-206-116-118.ngrok-free.app/codebase/trello-powerup-html/icon.png";
 
-var onBtnClick = function (t, opts) {
-  t.popup({
+var onBtnClick = async function (t, opts) {
+  const res = await t.board("id");
+  const boardId = res.id;
+  return t.popup({
     title: "Add key events",
     url: "./popup.html",
+    args: {
+      boardId: boardId,
+    },
   });
 };
 
