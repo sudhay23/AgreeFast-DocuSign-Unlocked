@@ -219,7 +219,7 @@
             } else {
               auth.classList.remove("hide");
               // make a request to our backend, get ics file, parse it and then add all cards to trello using REST API with the token received
-              const ics = `
+              var ics = `
       BEGIN:VCALENDAR
       VERSION:2.0
       CALSCALE:GREGORIAN
@@ -314,6 +314,12 @@
       END:VEVENT
       END:VCALENDAR
                     `;
+
+              const icsResp = await fetch(
+                `http://localhost:5500/api/envelope/${envelopeId}/getIcsData`
+              );
+              const data = await icsResp.json();
+              ics = data.icsData;
 
               const parsedIcs = parseICSContent(ics);
 
