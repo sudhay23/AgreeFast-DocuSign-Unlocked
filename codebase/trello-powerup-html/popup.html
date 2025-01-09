@@ -316,7 +316,7 @@
                     `;
 
               const icsResp = await fetch(
-                `http://localhost:5500/api/envelope/${envelopeId}/getIcsData`
+                `https://backend.agreefast.knowyours.co/api/envelope/${envelopeId}/getIcsData`
               );
               const data = await icsResp.json();
               ics = data.icsData;
