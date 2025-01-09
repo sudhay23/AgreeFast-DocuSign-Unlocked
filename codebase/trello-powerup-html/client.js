@@ -1,7 +1,7 @@
 var WHITE_ICON =
-  "https://2701-49-206-116-118.ngrok-free.app/codebase/trello-powerup-html/icon.png";
+  "https://7cf4-49-206-116-118.ngrok-free.app/codebase/trello-powerup-html/light.png";
 var BLACK_ICON =
-  "https://2701-49-206-116-118.ngrok-free.app/codebase/trello-powerup-html/icon.png";
+  "https://7cf4-49-206-116-118.ngrok-free.app/codebase/trello-powerup-html/dark.png";
 
 var onBtnClick = async function (t, opts) {
   const res = await t.board("id");
@@ -15,13 +15,6 @@ var onBtnClick = async function (t, opts) {
   });
 };
 
-function showIframe(t) {
-  return t.popup({
-    title: "Authorize to continue",
-    url: "./authorize.html",
-  });
-}
-
 window.TrelloPowerUp.initialize(
   {
     "board-buttons": function (t, opts) {
@@ -31,7 +24,7 @@ window.TrelloPowerUp.initialize(
             dark: WHITE_ICON,
             light: BLACK_ICON,
           },
-          text: "Callback",
+          text: "agreefast for Docusign",
           callback: onBtnClick,
           condition: "edit",
         },

@@ -14,7 +14,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 10px;
+        padding: 5px 10px 10px 10px;
       }
 
       .hide {
@@ -22,15 +22,7 @@
         opacity: 0;
         height: 0px;
         z-index: -10;
-      }
-
-      #final label {
-        text-align: center;
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
+        margin-top: 50px;
       }
 
       div {
@@ -45,6 +37,15 @@
 
       #loading {
         margin-top: 50px;
+      }
+
+      #final {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 20px;
       }
 
       .loader {
@@ -81,6 +82,10 @@
       }
     </style>
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script
+      src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+      type="module"
+    ></script>
   </head>
   <body>
     <div id="auth">
@@ -95,7 +100,14 @@
         <div class="loader hide"></div>
       </div>
       <div id="final" class="hide">
-        <label>Please refresh the page</label>
+        <dotlottie-player
+          src="https://lottie.host/4b8d9798-cd88-476a-acb8-aebf8d313c45/vrMkrUzaRX.lottie"
+          background="transparent"
+          speed="1"
+          style="width: 50px; height: 50px"
+          autoplay
+        ></dotlottie-player>
+        <label>Process successful</label>
       </div>
     </div>
     <script>
@@ -319,7 +331,6 @@
               const futureEvents = parsedIcsEvents.filter(
                 (ev) => ev.isPast === false
               );
-              console.log(parsedIcsEvents);
 
               // Trello api
 
@@ -335,7 +346,24 @@
                   }
                 );
                 const data = await response.json();
-                console.log(data);
+                const listId = data.id;
+                for (let i = pastEvents.length - 1; i >= 0; i--) {
+                  const res = await fetch(
+                    `https://api.trello.com/1/cards?idList=${listId}&key=392bf5fb0f36566b3a6b4650be628e92&token=${token}&name=${
+                      pastEvents[i].summary
+                    }&desc=${pastEvents[i].description}&start=${new Date(
+                      pastEvents[i].startDate
+                    ).toISOString()}&due=${new Date(
+                      pastEvents[i].endDate
+                    ).toISOString()}`,
+                    {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                      },
+                    }
+                  );
+                }
               }
               if (futureEvents.length > 0) {
                 const name = "Upcoming events";
@@ -349,7 +377,24 @@
                   }
                 );
                 const data = await response.json();
-                console.log(data);
+                const listId = data.id;
+                for (let i = futureEvents.length - 1; i >= 0; i--) {
+                  const res = await fetch(
+                    `https://api.trello.com/1/cards?idList=${listId}&key=392bf5fb0f36566b3a6b4650be628e92&token=${token}&name=${
+                      futureEvents[i].summary
+                    }&desc=${futureEvents[i].description}&start=${new Date(
+                      futureEvents[i].startDate
+                    ).toISOString()}&due=${new Date(
+                      futureEvents[i].endDate
+                    ).toISOString()}`,
+                    {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                      },
+                    }
+                  );
+                }
               }
               loading.classList.add("hide");
               final.classList.remove("hide");
