@@ -31,32 +31,40 @@ services:
     volumes:
       - rabbitmq_lib:/var/lib/rabbitmq
       - rabbitmq_log:/var/log/rabbitmq
-  # backend_api_service:
-  #   restart: always
-  #   depends_on:
-  #     - rabbitmq
-  #     - ai_service
-  #     - neo4j
-  #   build:
-  #     context: ./codebase/backend
-  #     dockerfile: Dockerfile
-  #   env_file:
-  #     - ./.env
-  #   ports:
-  #     - 5500:5500
+  trello_extension:
+    image: node:alpine
+    working_dir: /usr/src/app
+    ports:
+      - "3001:8080"
+    volumes:
+      - ./codebase/trello-powerup-html:/usr/src/app:ro
+    command: npx http-server -p 8080 # Serve using http-server
+  backend_api_service:
+    restart: always
+    depends_on:
+      - rabbitmq
+      - ai_service
+      - neo4j
+    build:
+      context: ./codebase/backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    ports:
+      - 5500:5500
 
-  # ai_service:
-  #   restart: always
-  #   depends_on:
-  #     - neo4j
-  #     - rabbitmq
-  #   build:
-  #     context: ./codebase/ai_service
-  #     dockerfile: Dockerfile
-  #   env_file:
-  #     - ./.env
-  #   ports:
-  #     - 6500:6500
+  ai_service:
+    restart: always
+    depends_on:
+      - neo4j
+      - rabbitmq
+    build:
+      context: ./codebase/ai_service
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    ports:
+      - 6500:6500
 
 volumes:
   neo4j_data:
