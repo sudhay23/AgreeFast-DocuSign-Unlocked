@@ -1,0 +1,412 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.css" />
+    <style>
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+
+      body,
+      #auth {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5px 10px 10px 10px;
+      }
+
+      .hide {
+        display: none;
+        opacity: 0;
+        height: 0px;
+        z-index: -10;
+        margin-top: 50px;
+      }
+
+      div {
+        width: 100%;
+      }
+
+      div:nth-child(2) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #loading {
+        margin-top: 50px;
+      }
+
+      #final {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 20px;
+      }
+
+      .loader {
+        width: 15px;
+        aspect-ratio: 1;
+        position: relative;
+      }
+      .loader::before,
+      .loader::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: #000;
+      }
+      .loader::before {
+        box-shadow: -25px 0;
+        animation: l8-1 1s infinite linear;
+      }
+      .loader::after {
+        transform: rotate(0deg) translateX(25px);
+        animation: l8-2 1s infinite linear;
+      }
+
+      @keyframes l8-1 {
+        100% {
+          transform: translateX(25px);
+        }
+      }
+      @keyframes l8-2 {
+        100% {
+          transform: rotate(-180deg) translateX(25px);
+        }
+      }
+    </style>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script
+      src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+      type="module"
+    ></script>
+  </head>
+  <body>
+    <div id="auth">
+      <div id="imp">
+        <label>Enter Docusign Envelope ID</label>
+        <form id="envelope">
+          <input type="text" />
+          <button type="submit" class="mod-primary">Done</button>
+        </form>
+      </div>
+      <div id="loading">
+        <div class="loader hide"></div>
+      </div>
+      <div id="final" class="hide">
+        <dotlottie-player
+          src="https://lottie.host/4b8d9798-cd88-476a-acb8-aebf8d313c45/vrMkrUzaRX.lottie"
+          background="transparent"
+          speed="1"
+          style="width: 50px; height: 50px"
+          autoplay
+        ></dotlottie-player>
+        <label>Process successful</label>
+      </div>
+    </div>
+    <script>
+      var t = window.TrelloPowerUp.iframe({
+        appKey: "392bf5fb0f36566b3a6b4650be628e92",
+        appName: "agreefast for Docusign",
+        appAuthor: "agreefast",
+      });
+      t.render(function () {
+        t.getRestApi()
+          .isAuthorized()
+          .then(function (isAuthorized) {
+            console.log("Successfully authorized");
+          });
+      });
+
+      const form = document.querySelector("form");
+      const envelopeId = document.querySelector("input");
+      const imp = document.getElementById("imp");
+      const loading = document.querySelector("#loading div");
+      const final = document.getElementById("final");
+      const auth = document.getElementById("auth");
+
+      const parseICSContent = (icsContent) => {
+        const lines = icsContent.split("\n").filter((line) => line.trim());
+
+        const events = [];
+        let currentEvent = {};
+        let inEvent = false;
+        let inAlarm = false;
+
+        lines.forEach((line) => {
+          const trimmedLine = line.trim();
+
+          if (trimmedLine === "BEGIN:VEVENT") {
+            currentEvent = {};
+            inEvent = true;
+          } else if (trimmedLine === "END:VEVENT") {
+            if (
+              currentEvent.summary &&
+              currentEvent.startDate &&
+              currentEvent.endDate &&
+              currentEvent.description
+            ) {
+              events.push(currentEvent);
+            }
+            inEvent = false;
+          } else if (trimmedLine === "BEGIN:VALARM") {
+            inAlarm = true;
+          } else if (trimmedLine === "END:VALARM") {
+            inAlarm = false;
+          } else if (inEvent && !inAlarm) {
+            const [key, ...values] = trimmedLine.split(":");
+            const value = values.join(":"); // Rejoin in case description contains colons
+
+            switch (key) {
+              case "SUMMARY":
+                currentEvent.summary = value;
+                break;
+              case "DTSTART;VALUE=DATE":
+                currentEvent.startDate = new Date(
+                  value.substring(0, 4) +
+                    "-" +
+                    value.substring(4, 6) +
+                    "-" +
+                    value.substring(6, 8)
+                ).getTime();
+                break;
+              case "DTEND;VALUE=DATE":
+                currentEvent.endDate = new Date(
+                  value.substring(0, 4) +
+                    "-" +
+                    value.substring(4, 6) +
+                    "-" +
+                    value.substring(6, 8)
+                ).getTime();
+                break;
+              case "DESCRIPTION":
+                currentEvent.description = value;
+                break;
+            }
+          }
+        });
+
+        return events.sort((a, b) => a - b);
+      };
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const envId = envelopeId.value;
+        const boardId = await t.arg("boardId");
+
+        loading.classList.remove("hide");
+        imp.classList.add("hide");
+
+        // do stuff...
+
+        t.getRestApi()
+          .getToken()
+          .then(async function (token) {
+            if (!token) {
+              // do auth instead
+              t.getRestApi()
+                .authorize({ scope: "read,write" })
+                .then(function (t) {
+                  loading.classList.add("hide");
+                  imp.classList.remove("hide");
+                });
+            } else {
+              auth.classList.remove("hide");
+              // make a request to our backend, get ics file, parse it and then add all cards to trello using REST API with the token received
+              var ics = `
+      BEGIN:VCALENDAR
+      VERSION:2.0
+      CALSCALE:GREGORIAN
+      METHOD:PUBLISH
+      BEGIN:VEVENT
+      UID:nda-20230607
+      SUMMARY:Non-Disclosure Agreement is made on this date
+      DESCRIPTION:Non-Disclosure Agreement is made on this date. Recipient shall be relieved of all obligations under the NDA on June 7, 2026.
+      DTSTART;VALUE=DATE:20230607
+      DTEND;VALUE=DATE:20230608
+      BEGIN:VALARM
+      TRIGGER:-PT1440M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-PT4320M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-PT10080M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      END:VEVENT
+      BEGIN:VEVENT
+      UID:nda-20260607
+      SUMMARY:Recipient relieved of NDA obligations
+      DESCRIPTION:Recipient shall be relieved of all obligations under the Non-Disclosure Agreement made on June 7, 2023.
+      DTSTART;VALUE=DATE:20260607
+      DTEND;VALUE=DATE:20260608
+      BEGIN:VALARM
+      TRIGGER:-PT1440M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-PT4320M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-PT10080M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      END:VEVENT
+      BEGIN:VEVENT
+      UID:nda-20230620
+      SUMMARY:Agreement signed by BuyCo
+      DESCRIPTION:Agreement signed on this date by BuyCo.
+      DTSTART;VALUE=DATE:20230620
+      DTEND;VALUE=DATE:20230621
+      BEGIN:VALARM
+      TRIGGER:-PT1440M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-PT4320M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-PT10080M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      END:VEVENT
+      BEGIN:VEVENT
+      UID:nda-20230621
+      SUMMARY:Agreement signed by Tally Services Inc
+      DESCRIPTION:Agreement signed on this date by Tally Services Inc.
+      DTSTART;VALUE=DATE:20230621
+      DTEND;VALUE=DATE:20230622
+      BEGIN:VALARM
+      TRIGGER:-PT1440M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-PT4320M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      BEGIN:VALARM
+      TRIGGER:-PT10080M
+      DESCRIPTION:Reminder
+      ACTION:DISPLAY
+      END:VALARM
+      END:VEVENT
+      END:VCALENDAR
+                    `;
+
+              const icsResp = await fetch(
+                `https://backend.agreefast.knowyours.co/api/envelope/${envelopeId}/getIcsData`
+              );
+              const data = await icsResp.json();
+              ics = data.icsData;
+
+              const parsedIcs = parseICSContent(ics);
+
+              const parsedIcsEvents = parsedIcs.map((ev) => {
+                const isPast = ev.startDate < Date.now();
+                return {
+                  ...ev,
+                  isPast,
+                };
+              });
+
+              const pastEvents = parsedIcsEvents.filter(
+                (ev) => ev.isPast === true
+              );
+              const futureEvents = parsedIcsEvents.filter(
+                (ev) => ev.isPast === false
+              );
+
+              // Trello api
+
+              if (pastEvents.length > 0) {
+                const name = "Done events";
+                const response = await fetch(
+                  `https://api.trello.com/1/boards/${boardId}/lists?name=${name}&key=392bf5fb0f36566b3a6b4650be628e92&token=${token}`,
+                  {
+                    method: "POST",
+                    headers: {
+                      Accept: "application/json",
+                    },
+                  }
+                );
+                const data = await response.json();
+                const listId = data.id;
+                for (let i = pastEvents.length - 1; i >= 0; i--) {
+                  const res = await fetch(
+                    `https://api.trello.com/1/cards?idList=${listId}&key=392bf5fb0f36566b3a6b4650be628e92&token=${token}&name=${
+                      pastEvents[i].summary
+                    }&desc=${pastEvents[i].description}&start=${new Date(
+                      pastEvents[i].startDate
+                    ).toISOString()}&due=${new Date(
+                      pastEvents[i].endDate
+                    ).toISOString()}`,
+                    {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                      },
+                    }
+                  );
+                }
+              }
+              if (futureEvents.length > 0) {
+                const name = "Upcoming events";
+                const response = await fetch(
+                  `https://api.trello.com/1/boards/${boardId}/lists?name=${name}&key=392bf5fb0f36566b3a6b4650be628e92&token=${token}`,
+                  {
+                    method: "POST",
+                    headers: {
+                      Accept: "application/json",
+                    },
+                  }
+                );
+                const data = await response.json();
+                const listId = data.id;
+                for (let i = futureEvents.length - 1; i >= 0; i--) {
+                  const res = await fetch(
+                    `https://api.trello.com/1/cards?idList=${listId}&key=392bf5fb0f36566b3a6b4650be628e92&token=${token}&name=${
+                      futureEvents[i].summary
+                    }&desc=${futureEvents[i].description}&start=${new Date(
+                      futureEvents[i].startDate
+                    ).toISOString()}&due=${new Date(
+                      futureEvents[i].endDate
+                    ).toISOString()}`,
+                    {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                      },
+                    }
+                  );
+                }
+              }
+              loading.classList.add("hide");
+              final.classList.remove("hide");
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -31,7 +31,7 @@ export const EnvelopeContents = ({ envelopeId }: { envelopeId: string }) => {
   }, []);
 
   return (
-    <div className="border-violet border-2 border-opacity-15  py-5 rounded-3xl h-full flex flex-col items-start">
+    <div className="border-violet border-2 border-opacity-25  py-5 rounded-3xl h-full flex flex-col items-start">
       <h1 className="text-[16px] font-medium text-black px-8 pt-3">
         Envelope Contents
       </h1>
@@ -51,7 +51,7 @@ export const EnvelopeContents = ({ envelopeId }: { envelopeId: string }) => {
                 data-tooltip-id="filename-tooltip"
                 data-tooltip-content={file.file_name}
               >
-                <div className="rounded-xl border-violet border-2 border-opacity-15 w-[40px] h-[40px] flex items-center justify-center">
+                <div className="rounded-xl border-violet border-2 border-opacity-25 w-[40px] h-[40px] flex items-center justify-center">
                   <DocumentAttachmentIcon
                     size={15}
                     className="text-violet"

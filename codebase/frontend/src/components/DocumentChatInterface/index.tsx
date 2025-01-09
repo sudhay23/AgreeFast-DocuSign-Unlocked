@@ -55,7 +55,7 @@ export const DocumentChatInterface = ({
   return (
     <>
       <div
-        className={`border-violet border-2 border-opacity-15 animate-in zoom-in fade-in duration-1000 py-5 rounded-3xl flex-1 flex flex-col items-start transition-all z-20 ${
+        className={`border-violet border-2 border-opacity-25 animate-in zoom-in fade-in duration-1000 py-5 rounded-3xl flex-1 flex flex-col items-start transition-all z-20 ${
           animState &&
           "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[80%] h-[90%] transition-all duration-700"
         }`}
