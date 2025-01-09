@@ -10,27 +10,33 @@ main {
   min-height: 22em;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: center;
   align-items: flex-start;
   gap: 10px;
-  padding: 2rem 2rem 0.7rem 2rem;
 }
 
 #setup_agreefast_docusign_connect_btn {
-  background-color: black;
+  background-color: #0099ff;
   color: white;
   border-radius: 10px;
-  padding: 5px 15px;
+  padding: 10px 15px;
   outline: none;
   border-width: 0;
   border: none;
-  box-shadow: 0 0 1px 5px black;
   cursor: pointer;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  margin: 40px auto 0 auto;
+  margin: 5px auto;
+  transition: all;
+  transition-duration: 500ms;
+}
+
+#setup_agreefast_docusign_connect_btn:hover {
+  background-color: #0274c0;
+  transition: all;
+  transition-duration: 500ms;
 }
 
 #setup_agreefast_docusign_connect_btn > img {
@@ -38,16 +44,24 @@ main {
   height: 15px;
 }
 
-header {
+.connect-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  width: 60%;
+  margin: 0 auto;
 }
 
 .logo {
-  width: 25px;
+  width: 20px;
   height: 20px;
+  padding-top: 5px;
+}
+
+.logo-2 {
+  width: 70px;
+  height: 70px;
 }
 
 .tick {
@@ -55,49 +69,65 @@ header {
   height: 10px;
 }
 
-header > h1 {
-  font-weight: 200;
-  font-size: 18px;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.container > h1 {
-  font-weight: 300;
-  font-size: 20px;
-}
-
-.container > div {
+#tag {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-left: 10px;
+  padding-top: 10px;
+  color: black;
 }
-
-.container > div > p {
+#tag > h1 {
   font-weight: 400;
-  font-size: 12px;
+  font-size: 10px;
+  opacity: 0.6;
 }
 
 footer {
-  margin-top: 1rem;
+  position: absolute;
+  bottom: 0;
   width: 100%;
+  padding-bottom: 15px;
 }
 
 footer > p {
   color: black;
   font-size: 10px;
   text-align: center;
+  opacity: 0.6;
 }
 
 footer a {
   color: black;
   text-decoration: none;
   font-weight: 600;
+}
+
+.line-container {
+  position: relative;
+  height: 2px;
+  background-color: #ddd;
+  flex-grow: 1;
+  transform: perspective(200px) rotateX(34deg);
+  overflow: hidden;
+}
+
+.moving-line {
+  position: absolute;
+  width: 20px;
+  height: 100%;
+  background-color: #007bff;
+  animation: moveLine 2s cubic-bezier(0.25, 0.1, 0.85, 1.3) infinite;
+}
+
+@keyframes moveLine {
+  0% {
+    left: -20px;
+  }
+  100% {
+    left: 100%;
+  }
 }
