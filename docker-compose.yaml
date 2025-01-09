@@ -6,8 +6,8 @@ services:
     image: neo4j:enterprise
     container_name: neo4j
     ports:
-      - "7474:7474" # HTTP interface
-      - "7687:7687" # Bolt protocol
+      - "7474:7474"
+      - "7687:7687"
     environment:
       - NEO4J_AUTH=neo4j/password
       - NEO4J_dbms_memory_heap_initial__size=512M
@@ -38,7 +38,7 @@ services:
       - "3001:8080"
     volumes:
       - ./codebase/trello-powerup-html:/usr/src/app:ro
-    command: npx http-server -p 8080 # Serve using http-server
+    command: npx http-server -p 8080
   backend_api_service:
     restart: always
     depends_on:
@@ -65,6 +65,13 @@ services:
       - ./.env
     ports:
       - 6500:6500
+  frontend:
+    restart: always
+    build:
+      context: ./codebase/frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
 
 volumes:
   neo4j_data:
