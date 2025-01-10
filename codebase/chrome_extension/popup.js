@@ -8,6 +8,10 @@ const setupAgreefastDocusignConnectBtn = document.querySelector(
   "#setup_agreefast_docusign_connect_btn"
 );
 
+const link = document.querySelector("a");
+
+link.href = "https://google.com";
+
 setupAgreefastDocusignConnectBtn.addEventListener("click", async (e) => {
   //  Open "https://admindemo.docusign.com/connect" / "https://apps-d.docusign.com/admin/connect"
   //  Open Dropdown by clicking "Add Configuration" button
