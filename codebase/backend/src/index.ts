@@ -109,9 +109,9 @@ app.post("/webhook", async (req: Request, res: Response) => {
     }
   } else if (type == "envelope-completed") {
     const data = req.body.data;
-    const completedDateTime = Math.floor(
-      new Date(data.envelopeSummary.completedDateTime).getTime() / 1000
-    );
+    const completedDateTime = new Date(
+      data.envelopeSummary.completedDateTime
+    ).getTime();
     const envelope_id = data.envelopeId;
     const envelope = await Envelope.findOne({ envelope_id });
     if (envelope) {
