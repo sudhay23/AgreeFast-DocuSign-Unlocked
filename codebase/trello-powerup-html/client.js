@@ -1,7 +1,5 @@
-var WHITE_ICON =
-  "https://agreefasttrello.knowyours.co/codebase/trello-powerup-html/light.png";
-var BLACK_ICON =
-  "https://agreefasttrello.knowyours.co/codebase/trello-powerup-html/dark.png";
+var WHITE_ICON = "https://agreefasttrello.knowyours.co/light.png";
+var BLACK_ICON = "https://agreefasttrello.knowyours.co/dark.png";
 
 var onBtnClick = async function (t, opts) {
   const res = await t.board("id");
