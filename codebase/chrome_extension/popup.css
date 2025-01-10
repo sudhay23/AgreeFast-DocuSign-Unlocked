@@ -80,6 +80,15 @@ main {
   padding-top: 10px;
   color: black;
 }
+
+a {
+  text-decoration: none;
+  color: rgb(3, 143, 251);
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+}
+
 #tag > h1 {
   font-weight: 400;
   font-size: 10px;
