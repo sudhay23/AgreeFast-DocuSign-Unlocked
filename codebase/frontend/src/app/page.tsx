@@ -1,20 +1,21 @@
+"use client";
+import { LinksPopup } from "@/components/LinksPopup";
 import DotPattern from "@/components/ui/dot-pattern";
+import InteractiveHoverButton from "@/components/ui/interactive-hover-button";
 import { TextAnimate } from "@/components/ui/text-animate";
+import WordRotate from "@/components/ui/word-rotate";
 import { appConfig } from "@/config/config";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Home() {
+  const [showPopup, setShowPopup] = useState(false);
   return (
-    <main className="w-full mt-20 relative">
-      <DotPattern
-        className={cn(
-          "[mask-image:radial-gradient(900px_circle_at_center,rgba(255,255,255,0.7),transparent)] -z-10"
-        )}
-      />{" "}
+    <main className="w-full mt-20">
+      <DotPattern className="z-10 opacity-50" />{" "}
       <div className="flex flex-col items-center gap-2">
-        <Link href={appConfig.extensionLink} className="my-5">
+        <Link href={appConfig.extensionLink} target="_blank" className="my-5">
           <Image
             src={"/webstore-badge.png"}
             alt="extension badge"
@@ -44,33 +45,27 @@ export default function Home() {
             <span className="text-violet">confidence</span> and{" "}
             <span className="text-violet">automation</span>
           </h1>
-          <p className="text-center text-[16px] text-black opacity-50 font-regular">
-            Escape the fine print. Never miss critical timelines. Sign on
-            <span className="font-medium"> Docusign</span> as you do, rest is on
-            us{" "}
-          </p>
+          <WordRotate
+            className="text-center text-[20px] text-gray-500 font-medium"
+            words={[
+              "🚀 Escape the fine print",
+              "⏳ Never miss critical timelines",
+              "🔏 Sign on Docusign as you always do, rest is on us",
+            ]}
+          />
         </div>
-        <div className="flex items-center gap-5 justify-center mt-10">
-          <Link
-            href="https://google.com"
-            className="rounded-badge flex gap-2 items-center text-[16px] text-violet font-medium px-3 py-2 border-violet border-2 hover:bg-violet group group-hover:text-white transition-all"
-          >
-            <div className="rounded-full p-2 text-[12px] border-violet border-2 group-hover:border-white group-hover:text-white transition-all flex items-center justify-center w-[20px] h-[20px]">
-              1
-            </div>
-            <p className="group-hover:text-white">Get a glimpse</p>
-          </Link>
-          <Link
-            href="https://google.com"
-            className="rounded-badge flex gap-2 items-center text-[16px] text-violet font-medium px-3 py-2 border-violet border-2 hover:bg-violet group group-hover:text-white transition-all"
-          >
-            <div className="rounded-full p-2 text-[12px] border-violet border-2 group-hover:border-white group-hover:text-white transition-all flex items-center justify-center w-[20px] h-[20px]">
-              2
-            </div>
-            <p className="group-hover:text-white">Get a glimpse</p>
-          </Link>
+
+        <div className="relative mt-10">
+          <InteractiveHoverButton
+            setShowPopup={setShowPopup}
+            text="View demo"
+          />
+          {showPopup && <LinksPopup setShowPopup={setShowPopup} />}
         </div>
       </div>
+      {showPopup && (
+        <div className="absolute h-screen w-screen bg-black opacity-60 z-10 top-0 left-0"></div>
+      )}
     </main>
   );
 }
