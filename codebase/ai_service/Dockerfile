@@ -2,6 +2,9 @@ FROM python:3.11-slim
 
 RUN mkdir /agreefast_ai_service
 RUN cd /agreefast_ai_service
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0
 COPY ./requirements.txt /agreefast_ai_service
 RUN pip install --no-cache-dir -r /agreefast_ai_service/requirements.txt
 COPY . /agreefast_ai_service

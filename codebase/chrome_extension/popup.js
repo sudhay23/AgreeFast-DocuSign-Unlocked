@@ -4,6 +4,7 @@ const sleep = async (ms) => {
   });
 };
 
+// Connect Agreefast to Docusign button
 const setupAgreefastDocusignConnectBtn = document.querySelector(
   "#setup_agreefast_docusign_connect_btn"
 );
@@ -17,5 +18,19 @@ setupAgreefastDocusignConnectBtn.addEventListener("click", async (e) => {
 
   await chrome.runtime.sendMessage({
     message: "start_connect_job",
+  });
+});
+
+// Launch Agreefast dashboard (if available)
+const lauchAgreefastDashboardBtn = document.querySelector(
+  "#launch_agreefast_dashboard_btn"
+);
+
+lauchAgreefastDashboardBtn.addEventListener("click", async (e) => {
+  // Get current tab in view and send the targeted message
+  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+    await chrome.tabs.sendMessage(tabs[0].id, {
+      message: "launch_agreefast_dashboard",
+    });
   });
 });

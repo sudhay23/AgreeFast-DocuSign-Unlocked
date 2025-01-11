@@ -2,7 +2,7 @@
   "name": "agreefast - AI for DocuSign",
   "description": "Grab powerful insights into your agreements like never before, powered by DocuSign. Now, 'Escape The Fineprint'!",
   "version": "1.0.0",
-  "permissions": ["activeTab", "storage", "notifications"],
+  "permissions": ["activeTab", "storage", "notifications", "scripting"],
   "action": {
     "default_icon": "assets/icon-64.png",
     "default_title": "agreefast",
@@ -25,6 +25,12 @@
         "https://admindemo.docusign.com/*",
         "https://apps-d.docusign.com/*"
       ]
+    },
+    {
+      "js": [
+        "scripts/content_scripts/launch_agreefast_dashboard_for_agreement.js"
+      ],
+      "matches": ["<all_urls>"]
     }
   ]
 }

@@ -31,6 +31,37 @@ main {
   margin: 5px auto;
   transition: all;
   transition-duration: 500ms;
+  width: 80%;
+  justify-content:center;
+}
+
+#launch_agreefast_dashboard_btn {
+  background-color: #e270fe;
+  color: white;
+  border-radius: 10px;
+  padding: 10px 15px;
+  outline: none;
+  border-width: 0;
+  border: #CC00FF;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap:10px;
+  margin: 5px auto;
+  transition: all;
+  transition-duration: 500ms;
+  width: 80%;
+  justify-content:center;
+}
+
+#launch_agreefast_dashboard_btn > img {
+  width: 15px;
+  height: 18px;
+}
+
+#launch_agreefast_dashboard_btn span{
+  font-weight: 400;
 }
 
 #setup_agreefast_docusign_connect_btn:hover {
@@ -80,6 +111,15 @@ main {
   padding-top: 10px;
   color: black;
 }
+
+a {
+  text-decoration: none;
+  color: rgb(3, 143, 251);
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+}
+
 #tag > h1 {
   font-weight: 400;
   font-size: 10px;
