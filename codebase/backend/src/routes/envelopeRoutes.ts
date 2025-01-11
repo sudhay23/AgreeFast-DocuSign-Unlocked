@@ -135,7 +135,7 @@ router.get(
     <div class="email-container">
       <div class="logo">
         <img
-          src="${process.env.FRONTEND_BASE_URL}/static/logo.png"
+          src="${process.env.BACKEND_BASE_URL}/static/logo.png"
           alt="AgreeFast Logo"
         />
         <h1>agreefast</h1>
@@ -438,7 +438,7 @@ router.post(
     <div class="email-container">
       <div class="logo">
         <img
-          src="${process.env.FRONTEND_BASE_URL}/static/logo.png"
+          src="${process.env.BACKEND_BASE_URL}/static/logo.png"
           alt="AgreeFast Logo"
         />
         <h1>agreefast</h1>
