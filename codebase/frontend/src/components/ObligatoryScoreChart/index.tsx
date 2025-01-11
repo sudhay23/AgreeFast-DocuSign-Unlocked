@@ -34,7 +34,7 @@ export const ObligatoryScoreChart = ({
         <button
           className="p-2 w-[20px] h-[20px] flex items-center justify-center rounded-full bg-black bg-opacity-10 text-black text-opacity-40 absolute top-3 right-3 text-[12px]"
           data-tooltip-id="score-tooltip"
-          data-tooltip-content="A higher score indicates better compliance with the agreement terms, reducing the risk of the agreement being voided."
+          data-tooltip-content="A higher score implies higher compliance obligations to the parties involved in the agreement. This is indicative of the risk of agreement being voided in case of non-compliance."
         >
           i
         </button>
