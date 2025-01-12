@@ -2,6 +2,7 @@ import dotenv, logging
 dotenv.load_dotenv("./.env")
 import os
 from datetime import datetime
+from utils.model import provision_chat_model
 from utils.mongodb import update_captured_events, update_events_ics, update_compliance_obligatory_score, update_obligatory_statements, get_envelope_details
 from langchain_community.document_loaders.pdf import OnlinePDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -40,7 +41,11 @@ def constuct_ics_file(envelope_id, llm, embedding_model):
 
     # Construct ICS file
     print("ICS Prompt: ",PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
-    ics_response = llm.with_structured_output(ICSResponse).invoke(PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
+    # ics_response = llm.with_structured_output(ICSResponse).invoke(PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
+
+    # Use GPT-4o-mini to construct ICS file
+    mini_llm = provision_chat_model(os.getenv("AZURE_OPENAI_DEPLOYMENT_2"))
+    ics_response = mini_llm.with_structured_output(ICSResponse).invoke(PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
 
     # Write ICS file to DB
     update_events_ics(envelope_id,ics_response.data)
