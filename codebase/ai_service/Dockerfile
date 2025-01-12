@@ -16,4 +16,4 @@ RUN cp -rf /agreefast_ai_service/patched-pip-files/langchain_neo4j/chains/graph_
 
 WORKDIR /agreefast_ai_service/src
 # CMD [ "python","-m","uvicorn","app:app","--port","6500","--host","0.0.0.0" ]
-CMD [ "python","app.py" ]
+CMD [ "python","-u","app.py" ]
