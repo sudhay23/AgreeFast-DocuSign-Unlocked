@@ -17,7 +17,8 @@ async def create_rabbitmq_connection():
         # Keep the consumer running
         print("Started RabbitMQ consumer...")
         await asyncio.Event().wait()
-    except:
+    except Exception as e:
+        print("RabbitMQ Error Occured: ",e)
         exit(1)
 
 async def queue_consumer_callback(message: aio_pika.IncomingMessage):
