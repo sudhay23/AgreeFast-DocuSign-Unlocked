@@ -9,8 +9,9 @@ from utils.api import notify_backend_ai_process_completion
 def create_rabbitmq_connection():
     try:
         # Establish a connection to RabbitMQ server
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=os.getenv("RABBITMQ_HOST"),port=os.getenv("RABBITMQ_PORT"),credentials=pika.PlainCredentials(os.getenv("RABBITMQ_USERNAME"),os.getenv("RABBITMQ_PASSWORD"))))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(heartbeat=60*40,host=os.getenv("RABBITMQ_HOST"),port=os.getenv("RABBITMQ_PORT"),credentials=pika.PlainCredentials(os.getenv("RABBITMQ_USERNAME"),os.getenv("RABBITMQ_PASSWORD"))))
         channel = connection.channel()
+        channel.basic_qos(prefetch_count=1)
         return channel
     except Exception as e:
         print("Error Occurred: ",e)
@@ -55,11 +56,15 @@ def queue_consumer_callback(ch, method, properties, body):
             notify_backend_ai_process_completion(envelope_id)
 
             print(f"AI Processing complete for envelope {envelope_id}")
+            
+            ch.basic_ack(delivery_tag=method.delivery_tag)
 
             return
         except Exception as e:
             print("Error Occured: ",e)
             traceback.print_exception(e)
             print("Got: ",str(body,"utf-8"))
+
+            ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
             return
