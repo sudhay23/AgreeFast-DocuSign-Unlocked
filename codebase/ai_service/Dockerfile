@@ -9,6 +9,7 @@ COPY ./requirements.txt /agreefast_ai_service
 RUN pip install --no-cache-dir -r /agreefast_ai_service/requirements.txt
 COPY . /agreefast_ai_service
 EXPOSE 6500
+ENV PYTHONUNBUFFERED=1
 
 # Pip package patches
 RUN cp -rf /agreefast_ai_service/patched-pip-files/langchain_experimental/graph_transformers/llm.py /usr/local/lib/python3.11/site-packages/langchain_experimental/graph_transformers/llm.py
