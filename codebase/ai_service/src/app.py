@@ -11,7 +11,7 @@ if __name__ == "__main__":
     channel.queue_declare(queue=os.getenv("RABBITMQ_WORKER_QUEUE_NAME"), durable=True)
 
     # Set up the consumer to listen to the queue
-    channel.basic_consume(queue=os.getenv("RABBITMQ_WORKER_QUEUE_NAME"), on_message_callback=queue_consumer_callback, auto_ack=True)
+    channel.basic_consume(queue=os.getenv("RABBITMQ_WORKER_QUEUE_NAME"), on_message_callback=queue_consumer_callback, auto_ack=False)
 
     # Start consuming (this will block until the consumer is manually stopped)
     print(' [*] Waiting for messages. To exit press CTRL+C')
