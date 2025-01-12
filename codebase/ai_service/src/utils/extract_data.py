@@ -39,6 +39,7 @@ def constuct_ics_file(envelope_id, llm, embedding_model):
     date_events = get_envelope_details(envelope_id)['events']
 
     # Construct ICS file
+    print("ICS Prompt: ",PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
     ics_response = llm.with_structured_output(ICSResponse).invoke(PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
 
     # Write ICS file to DB
