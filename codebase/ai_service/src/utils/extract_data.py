@@ -1,6 +1,6 @@
 import dotenv, logging
 dotenv.load_dotenv("./.env")
-import os,json
+import os
 from datetime import datetime
 from utils.mongodb import update_captured_events, update_events_ics, update_compliance_obligatory_score, update_obligatory_statements, get_envelope_details
 from langchain_community.document_loaders.pdf import OnlinePDFLoader

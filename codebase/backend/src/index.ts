@@ -25,7 +25,7 @@ dotenv.config({
 const app = express();
 const PORT = 5500;
 const MONGODB_URI = process.env.MONGODB_URI;
-const RABBITMQ_URI = process.env.RABBITMQ_CONNECTION_STRING;
+const RABBITMQ_URI = `amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`;
 const RABBITMQ_QUEUE = process.env.RABBITMQ_WORKER_QUEUE_NAME;
 
 app.use(cors());
