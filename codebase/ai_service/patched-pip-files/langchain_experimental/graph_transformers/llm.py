@@ -1,4 +1,4 @@
-import asyncio
+import asyncio,logging
 import json
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Type, Union, cast
 
@@ -936,7 +936,8 @@ class LLMGraphTransformer:
             converted_graph_doc = self.process_response(documents[i], config)
             # print(converted_graph_doc.model_dump_json())
             final_response.append(converted_graph_doc)
-            print(f"{i+1}/{len(documents)} done")
+            # print(f"{i+1}/{len(documents)} done")
+            logging.info(f"{i+1}/{len(documents)} done")
         return final_response
 
     async def aprocess_response(

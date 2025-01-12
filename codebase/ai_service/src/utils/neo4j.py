@@ -1,4 +1,4 @@
-import os
+import os,logging
 from neo4j import GraphDatabase
 from langchain_neo4j import Neo4jGraph
 from langchain_experimental.graph_transformers import LLMGraphTransformer
@@ -13,17 +13,17 @@ def create_graph_database_for_envelope(envelope_id):
             # Query to create a new database
             create_db_query = f"CREATE DATABASE {get_neo4j_db_name(envelope_id)}"
             session.run(create_db_query)
-            print(f"Database '{get_neo4j_db_name(envelope_id)}' created successfully!")
+            logging.info(f"Database '{get_neo4j_db_name(envelope_id)}' created successfully!")
             return get_neo4j_db_name(envelope_id)
     except Exception as e:
-        print(f"Error creating database on Neo4j: {e}")
+        logging.error(f"Error creating database on Neo4j: {e}")
 
 def get_neo4j_db_name(envelope_id:str):
     return f'neo4j{envelope_id.replace("-","")}'
     # return f'neo4j'
 
 def build_neo4j_knowledge_graph(envelope_id, document_name, document_path, llm, embedding_model):
-    print(f"----Building Knowledge Graph for '{document_name}'----")
+    logging.info(f"----Building Knowledge Graph for '{document_name}'----")
     document_link = f"{os.getenv('BACKEND_BASE_URL')}{document_path}"
     graph = Neo4jGraph(url=os.getenv("NEO4J_URI"),database=get_neo4j_db_name(envelope_id),username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
 

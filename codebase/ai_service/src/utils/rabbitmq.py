@@ -1,4 +1,6 @@
 import aio_pika, os, asyncio, json, traceback
+from langchain_neo4j import Neo4jVector
+from utils.neo4j import get_neo4j_db_name
 from utils.neo4j import create_graph_database_for_envelope, build_neo4j_knowledge_graph
 from utils.mongodb import get_envelope_details
 from utils.model import provision_chat_model, provision_embedding_model
@@ -48,6 +50,9 @@ async def queue_consumer_callback(message: aio_pika.IncomingMessage):
 
                 # Calculate compliance_obligatory_score from all found obligations
                 calculate_compliance_obligatory_score(envelope_id, llm, embedding_model)
+
+                # Prepare Vector Store in the knowledge graph
+                vector_store = Neo4jVector.from_existing_graph(embedding=embedding_model,search_type="hybrid",node_label="Document",text_node_properties=['text'],embedding_node_property="vector_embedding",url=os.getenv("NEO4J_URI"),database=get_neo4j_db_name(envelope_id),username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
 
 
                 # Call 'ai_processing_complete' endpoint on Backend API Server
