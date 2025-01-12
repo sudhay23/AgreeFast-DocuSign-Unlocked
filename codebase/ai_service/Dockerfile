@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y \
 COPY ./requirements.txt /agreefast_ai_service
 RUN pip install --no-cache-dir -r /agreefast_ai_service/requirements.txt
 COPY . /agreefast_ai_service
-EXPOSE 6500
 ENV PYTHONUNBUFFERED=1
 
 # Pip package patches

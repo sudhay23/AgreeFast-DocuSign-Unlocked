@@ -5,7 +5,7 @@ langchain-ollama
 langgraph
 python-dotenv
 langchain_experimental
-unstructured[all-docs]
 langchain_text_splitters
-pika
+fastapi[standard]
+uvicorn[standard]
 pymongo

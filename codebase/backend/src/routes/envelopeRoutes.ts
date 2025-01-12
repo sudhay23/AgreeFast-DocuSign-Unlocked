@@ -17,7 +17,7 @@ const router = express.Router();
 
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
-const AI_SERVICE_BASE_URL = process.env.AI_SERVICE_BASE_URL;
+const CHAT_SERVICE_BASE_URL = process.env.CHAT_SERVICE_BASE_URL;
 
 console.log("Email user:", EMAIL_USER);
 console.log("Email pass:", EMAIL_PASS);
@@ -311,7 +311,7 @@ router.post("/:id/chat", async (req: Request, res: Response): Promise<any> => {
   const envelopeId = req.params.id;
   const { user_question } = req.body;
   try {
-    const response = await axios.post(`${AI_SERVICE_BASE_URL}/chat`, {
+    const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
       envelope_id: envelopeId,
       user_question,
     });
