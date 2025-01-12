@@ -1,4 +1,4 @@
-import pika, os, json, traceback
+import pika, os, json, traceback, threading
 from langchain_neo4j import Neo4jVector
 from utils.neo4j import create_graph_database_for_envelope, build_neo4j_knowledge_graph, get_neo4j_db_name
 from utils.mongodb import get_envelope_details
@@ -9,7 +9,8 @@ from utils.api import notify_backend_ai_process_completion
 def create_rabbitmq_connection():
     try:
         # Establish a connection to RabbitMQ server
-        connection = pika.BlockingConnection(pika.ConnectionParameters(heartbeat=60*40,host=os.getenv("RABBITMQ_HOST"),port=os.getenv("RABBITMQ_PORT"),credentials=pika.PlainCredentials(os.getenv("RABBITMQ_USERNAME"),os.getenv("RABBITMQ_PASSWORD"))))
+        # connection = pika.BlockingConnection(pika.ConnectionParameters(heartbeat=60*40,host=os.getenv("RABBITMQ_HOST"),port=os.getenv("RABBITMQ_PORT"),credentials=pika.PlainCredentials(os.getenv("RABBITMQ_USERNAME"),os.getenv("RABBITMQ_PASSWORD"))))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(heartbeat=60,host=os.getenv("RABBITMQ_HOST"),port=os.getenv("RABBITMQ_PORT"),credentials=pika.PlainCredentials(os.getenv("RABBITMQ_USERNAME"),os.getenv("RABBITMQ_PASSWORD"))))
         channel = connection.channel()
         channel.basic_qos(prefetch_count=1)
         return channel
@@ -68,3 +69,7 @@ def queue_consumer_callback(ch, method, properties, body):
             ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
             return
+        
+def trigger_thread_for_ai_processing_consumer_callback(ch, method, properties, body):
+    # Launch a new thread to handle the message
+    threading.Thread(target=queue_consumer_callback, args=(ch, method, properties, body)).start()
