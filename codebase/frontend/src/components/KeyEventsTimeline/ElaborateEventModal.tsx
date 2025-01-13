@@ -62,9 +62,9 @@ END:VCALENDAR`;
             onClick={() => {
               console.log("Adding");
             }}
-            className="bg-blue-600 text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
+            className="bg-pink-600 text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
           >
-            <p className="text-white text-[12px]">Add event to Jira calendar</p>
+            <p className="text-white text-[12px]">Add event to Trello board</p>
           </button>
         </div>
       </div>

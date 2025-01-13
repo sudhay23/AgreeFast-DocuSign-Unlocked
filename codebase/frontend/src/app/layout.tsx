@@ -4,6 +4,7 @@ import "./globals.css";
 import "react-tooltip/dist/react-tooltip.css";
 import { Navbar } from "@/components/Navbar";
 import { OrientationWarning } from "@/components/OrientationWarning";
+import { Bounce, ToastContainer } from "react-toastify";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,6 +37,18 @@ export default function RootLayout({
           {children}
         </main>
         <OrientationWarning />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
       </body>
     </html>
   );
