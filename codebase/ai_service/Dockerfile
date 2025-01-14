@@ -16,6 +16,9 @@ RUN apt-get update && \
     tesseract-ocr \
     && rm -rf /var/lib/apt/lists/*
 
+# Download the 'punkt' resource for NLTK
+RUN python -c "import nltk; nltk.download('punkt')"
+
 # Pip package patches
 RUN cp -rf /agreefast_ai_service/patched-pip-files/langchain_experimental/graph_transformers/llm.py /usr/local/lib/python3.11/site-packages/langchain_experimental/graph_transformers/llm.py
 RUN cp -rf /agreefast_ai_service/patched-pip-files/langchain_neo4j/chains/graph_qa/prompts.py /usr/local/lib/python3.11/site-packages/langchain_neo4j/chains/graph_qa/prompts.py
