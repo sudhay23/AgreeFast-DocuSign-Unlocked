@@ -31,6 +31,7 @@ services:
     volumes:
       - rabbitmq_lib:/var/lib/rabbitmq
       - rabbitmq_log:/var/log/rabbitmq
+      - ./config_files/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro # Mount custom config
   trello_extension:
     image: node:alpine
     working_dir: /usr/src/app
