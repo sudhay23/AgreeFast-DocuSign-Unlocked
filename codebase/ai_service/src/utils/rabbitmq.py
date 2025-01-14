@@ -25,9 +25,10 @@ def queue_consumer_callback(ch, method, properties, body):
             envelope_id = message_payload.get("envelope_id",None)
             if not envelope_id:
                 print("Message payload should contain 'envelope_id'")
-
                 return
             
+            print("Starting AI Processing for envelope: ",envelope_id)
+
             # Create a Neo4j Graph DB
             neo4j_db_name = create_graph_database_for_envelope(envelope_id)
 
