@@ -17,7 +17,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Download the 'punkt' resource for NLTK
-RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab');"
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('averaged_perceptron_tagger_eng');"
 
 # Pip package patches
 RUN cp -rf /agreefast_ai_service/patched-pip-files/langchain_experimental/graph_transformers/llm.py /usr/local/lib/python3.11/site-packages/langchain_experimental/graph_transformers/llm.py
