@@ -41,6 +41,7 @@ io.on("connection", (socket) => {
       envelope_id: data.envelopeId,
       user_question: data.user_question,
     });
+    // const dummyResponse = { data: data };
     io.emit("ai_response", response.data);
   });
 
