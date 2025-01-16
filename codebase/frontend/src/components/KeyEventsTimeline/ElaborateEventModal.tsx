@@ -1,7 +1,8 @@
 import React from "react";
 import { Event } from "./types";
-import { formatDate, openModal } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { Calendar02Icon } from "hugeicons-react";
+import { toast } from "react-toastify";
 
 export const ElaborateEventModal = ({ event }: { event: Event | null }) => {
   const downloadICS = () => {
@@ -50,7 +51,6 @@ END:VCALENDAR`;
         <div className="flex flex-wrap gap-3 items-center justify-start mt-5">
           <button
             onClick={() => {
-              console.log("Adding");
               downloadICS();
             }}
             className="bg-violet text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
@@ -60,11 +60,11 @@ END:VCALENDAR`;
           </button>
           <button
             onClick={() => {
-              console.log("Adding");
+              toast("Trello power-up still under review.");
             }}
-            className="bg-blue-600 text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
+            className="bg-pink-600 text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
           >
-            <p className="text-white text-[12px]">Add event to Jira calendar</p>
+            <p className="text-white text-[12px]">Add event to Trello board</p>
           </button>
         </div>
       </div>

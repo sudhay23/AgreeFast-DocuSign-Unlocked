@@ -3,7 +3,8 @@ import { twMerge } from "tailwind-merge";
 import { Event } from "../components/KeyEventsTimeline/types";
 
 export const parseICSContent = (icsContent: string): Event[] => {
-  const lines = icsContent.split("\n").filter((line) => line.trim());
+  const replaced = icsContent.replaceAll("\\n", "\n");
+  const lines = replaced.split("\n").filter((line) => line.trim());
 
   const events: Event[] = [];
   let currentEvent: Partial<Event> = {};

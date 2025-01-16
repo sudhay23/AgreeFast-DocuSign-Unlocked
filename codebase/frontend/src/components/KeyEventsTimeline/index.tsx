@@ -94,7 +94,7 @@ export const KeyEventsTimeline = ({ envelopeId }: { envelopeId: string }) => {
         }}
         place="top"
       />
-      <AddToPlatformsModal ics={ics} />
+      <AddToPlatformsModal ics={ics} envId={envelopeId} />
       <ElaborateEventModal event={activeEvent} />
     </div>
   );
