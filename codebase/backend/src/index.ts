@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -8,6 +9,8 @@ import amqp from "amqplib";
 import { fileURLToPath } from "url";
 import path from "path";
 import envelopeRoutes from "./routes/envelopeRoutes.js";
+import { Server } from "socket.io";
+import axios from "axios";
 
 // Resolve __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -23,10 +26,18 @@ dotenv.config({
 });
 
 const app = express();
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 const PORT = 5500;
 const MONGODB_URI = process.env.MONGODB_URI;
 const RABBITMQ_URI = `amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`;
 const RABBITMQ_QUEUE = process.env.RABBITMQ_WORKER_QUEUE_NAME;
+const CHAT_SERVICE_BASE_URL = process.env.CHAT_SERVICE_BASE_URL;
 
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
@@ -71,6 +82,26 @@ app.use("/api/envelope", envelopeRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");
+});
+
+// Handle socket connections
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
+
+  socket.on("chat", async (data) => {
+    console.log(`User Question received: ${data.user_question}`);
+    // const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
+    //   envelope_id: data.envelopeId,
+    //   user_question: data.user_question,
+    // });
+    const dummyResponse = { data: data };
+    io.emit("ai_response", dummyResponse.data);
+    // io.emit("ai_response", response.data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
+  });
 });
 
 app.post("/webhook", async (req: Request, res: Response) => {
@@ -124,7 +155,7 @@ app.post("/webhook", async (req: Request, res: Response) => {
   res.sendStatus(200);
 });
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port :${PORT}`);
 });
 
