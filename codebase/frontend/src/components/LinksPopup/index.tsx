@@ -34,7 +34,7 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
           <div
             onClick={() =>
               window.open(
-                "https://agreefast.knowyours.com/room/838a5c2b-212f-490f-bacd-f4badec99c24?p=1",
+                "https://agreefast.knowyours.co/room/838a5c2b-212f-490f-bacd-f4badec99c24?p=1",
                 "_blank",
               )
             }
@@ -57,7 +57,7 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
           <div
             onClick={() =>
               window.open(
-                "https://agreefast.knowyours.com/room/fa012239-f2ec-428e-8e86-e0b4e05a6e0f?p=2",
+                "https://agreefast.knowyours.co/room/fa012239-f2ec-428e-8e86-e0b4e05a6e0f?p=2",
                 "_blank",
               )
             }
