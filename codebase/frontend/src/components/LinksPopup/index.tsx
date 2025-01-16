@@ -24,7 +24,7 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
         <div className="flex flex-col items-center gap-5">
           <div className="flex flex-col items-center gap-3">
             <Image
-              src={"/demo-1.png"}
+              src={"/demo-1.jpeg"}
               alt="Demo agreement 1"
               width={100}
               height={20}
@@ -32,7 +32,12 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
             <p className="text-black text-opacity-75">Experience 1</p>
           </div>
           <div
-            onClick={() => window.open("https://google.com", "_blank")}
+            onClick={() =>
+              window.open(
+                "https://agreefast.knowyours.com/room/838a5c2b-212f-490f-bacd-f4badec99c24?p=1",
+                "_blank",
+              )
+            }
             className="flex items-center gap-1 hover:scale-105 transition-all cursor-pointer"
           >
             <p className="text-violet text-[14px]">Gather insights</p>
@@ -42,7 +47,7 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
         <div className="flex flex-col items-center gap-5">
           <div className="flex flex-col items-center gap-3">
             <Image
-              src={"/demo-1.png"}
+              src={"/demo-2.png"}
               alt="Demo agreement 1"
               width={100}
               height={20}
@@ -50,7 +55,12 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
             <p className="text-black text-opacity-75">Experience 2</p>
           </div>
           <div
-            onClick={() => window.open("https://google.com", "_blank")}
+            onClick={() =>
+              window.open(
+                "https://agreefast.knowyours.com/room/fa012239-f2ec-428e-8e86-e0b4e05a6e0f?p=2",
+                "_blank",
+              )
+            }
             className="flex items-center gap-1 hover:scale-105 transition-all cursor-pointer"
           >
             <p className="text-violet text-[14px]">Gather insights</p>

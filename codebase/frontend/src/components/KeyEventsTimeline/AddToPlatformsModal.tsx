@@ -54,7 +54,7 @@ export const AddToPlatformsModal = ({
           </button>
           <button
             onClick={() => {
-              console.log("Adding");
+              toast("Trello power-up still under review.");
             }}
             className="bg-pink-600 text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
           >
