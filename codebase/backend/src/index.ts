@@ -90,13 +90,13 @@ io.on("connection", (socket) => {
 
   socket.on("chat", async (data) => {
     console.log(`User Question received: ${data.user_question}`);
-    // const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
-    //   envelope_id: data.envelopeId,
-    //   user_question: data.user_question,
-    // });
-    const dummyResponse = { data: data };
-    io.emit("ai_response", dummyResponse.data);
-    // io.emit("ai_response", response.data);
+    const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
+      envelope_id: data.envelopeId,
+      user_question: data.user_question,
+    });
+    io.emit("ai_response", response.data);
+    // const dummyResponse = { data: data };
+    // io.emit("ai_response", dummyResponse.data);
   });
 
   socket.on("disconnect", () => {
