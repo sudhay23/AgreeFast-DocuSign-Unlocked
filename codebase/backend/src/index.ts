@@ -90,13 +90,17 @@ io.on("connection", (socket) => {
 
   socket.on("chat", async (data) => {
     console.log(`User Question received: ${data.user_question}`);
-    const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
-      envelope_id: data.envelopeId,
-      user_question: data.user_question,
-    });
-    socket.emit("ai_response", response.data);
-    // const dummyResponse = { data: data };
-    // io.emit("ai_response", dummyResponse.data);
+    try {
+      const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
+        envelope_id: data.envelope_id,
+        user_question: data.user_question,
+      });
+      socket.emit("ai_response", response.data);
+      // const dummyResponse = { data: data };
+      // io.emit("ai_response", dummyResponse.data);
+    } catch (error) {
+      console.log("Error handling the chat", error);
+    }
   });
 
   socket.on("disconnect", () => {
