@@ -1,6 +1,25 @@
 version: "3.8"
 
 services:
+  # Traefik Proxy
+  traefik:
+    image: traefik:2.4
+    ports:
+      - 80:80
+      - 443:443
+      - 8888:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./dockervolumes/traefik/traefik.yml:/etc/traefik/traefik.yml
+    links:
+      - trello_extension
+      - backend_api_service
+      - ai_service
+      - chat_service
+      - frontend
+      - neo4j
+      - rabbitmq
+
   neo4j:
     restart: always
     image: neo4j:enterprise
@@ -32,6 +51,7 @@ services:
       - rabbitmq_lib:/var/lib/rabbitmq
       - rabbitmq_log:/var/log/rabbitmq
       - ./config_files/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro # Mount custom config
+
   trello_extension:
     image: node:alpine
     working_dir: /usr/src/app
@@ -40,6 +60,12 @@ services:
     volumes:
       - ./codebase/trello-powerup-html:/usr/src/app:ro
     command: npx http-server -p 8080
+    labels:
+      - "traefik.http.routers.trello.rule=Host(`agreefasttrello.knowyours.co`)"
+      - "traefik.enable=true"
+      - "traefik.port=3001"
+      - "traefik.http.routers.trello.entrypoints=web"
+
   backend_api_service:
     restart: always
     depends_on:
@@ -53,6 +79,11 @@ services:
       - ./.env
     ports:
       - 5500:5500
+    labels:
+      - "traefik.http.routers.api.rule=Host(`agreefastapi.knowyours.co`)"
+      - "traefik.enable=true"
+      - "traefik.port=5500"
+      - "traefik.http.routers.api.entrypoints=web"
 
   ai_service:
     restart: always
@@ -77,6 +108,11 @@ services:
       - ./.env
     ports:
       - 6500:6500
+    labels:
+      - "traefik.http.routers.chat.rule=Host(`agreefastchat.knowyours.co`)"
+      - "traefik.enable=true"
+      - "traefik.port=6500"
+      - "traefik.http.routers.chat.entrypoints=web"
 
   frontend:
     restart: always
@@ -85,6 +121,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    labels:
+      - "traefik.http.routers.frontend.rule=Host(`agreefast.knowyours.co`)"
+      - "traefik.enable=true"
+      - "traefik.port=3000"
+      - "traefik.http.routers.frontend.entrypoints=web"
 
 volumes:
   neo4j_data:
