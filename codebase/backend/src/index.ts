@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename);
 
 console.log(
   "Resolved .env file path:",
-  path.join(__dirname, "..", "..", "..", ".env"),
+  path.join(__dirname, "..", "..", "..", ".env")
 );
 
 dotenv.config({
@@ -89,18 +89,14 @@ io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
 
   socket.on("chat", async (data) => {
-    try {
-      console.log(`User Question received: ${data.user_question}`);
-      const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
-        envelope_id: data.envelope_id,
-        user_question: data.user_question,
-      });
-      io.emit("ai_response", response.data);
-      // const dummyResponse = { data: data };
-      // io.emit("ai_response", dummyResponse.data);
-    } catch (err) {
-      console.log("Error handling the chat", err);
-    }
+    console.log(`User Question received: ${data.user_question}`);
+    const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
+      envelope_id: data.envelopeId,
+      user_question: data.user_question,
+    });
+    socket.emit("ai_response", response.data);
+    // const dummyResponse = { data: data };
+    // io.emit("ai_response", dummyResponse.data);
   });
 
   socket.on("disconnect", () => {
@@ -117,13 +113,13 @@ app.post("/webhook", async (req: Request, res: Response) => {
     const envelope = new Envelope();
     envelope.envelope_id = data.envelopeId;
     envelope.recipients_emails = data.envelopeSummary.recipients.signers.map(
-      (signer: any) => signer.email,
+      (signer: any) => signer.email
     );
     envelope.sender_id = data.userId;
     envelope.sender_email = data.envelopeSummary.sender.email;
 
     const docs = data.envelopeSummary.envelopeDocuments.filter(
-      (doc: any) => doc.name != "Summary",
+      (doc: any) => doc.name != "Summary"
     );
     const agreements = [];
     for (const doc of docs) {
@@ -138,14 +134,14 @@ app.post("/webhook", async (req: Request, res: Response) => {
     if (channel) {
       channel.sendToQueue(
         RABBITMQ_QUEUE!,
-        Buffer.from(`{"envelope_id":"${data.envelopeId}"}`),
+        Buffer.from(`{"envelope_id":"${data.envelopeId}"}`)
       );
       console.log(`${data.envelopeId} sent to '${RABBITMQ_QUEUE}'`);
     }
   } else if (type == "envelope-completed") {
     const data = req.body.data;
     const completedDateTime = new Date(
-      data.envelopeSummary.completedDateTime,
+      data.envelopeSummary.completedDateTime
     ).getTime();
     const envelope_id = data.envelopeId;
     const envelope = await Envelope.findOne({ envelope_id });
