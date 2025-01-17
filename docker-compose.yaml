@@ -64,7 +64,7 @@ services:
       - "traefik.http.routers.trello.rule=Host(`agreefasttrello.knowyours.co`)"
       - "traefik.enable=true"
       - "traefik.port=3001"
-      - "traefik.http.routers.trello.entrypoints=web"
+      - "traefik.http.routers.trello.entrypoints=websecure"
 
   backend_api_service:
     restart: always
@@ -83,7 +83,7 @@ services:
       - "traefik.http.routers.api.rule=Host(`agreefastapi.knowyours.co`)"
       - "traefik.enable=true"
       - "traefik.port=5500"
-      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.api.entrypoints=websecure"
 
   ai_service:
     restart: always
@@ -112,7 +112,7 @@ services:
       - "traefik.http.routers.chat.rule=Host(`agreefastchat.knowyours.co`)"
       - "traefik.enable=true"
       - "traefik.port=6500"
-      - "traefik.http.routers.chat.entrypoints=web"
+      - "traefik.http.routers.chat.entrypoints=websecure"
 
   frontend:
     restart: always
@@ -125,7 +125,7 @@ services:
       - "traefik.http.routers.frontend.rule=Host(`agreefast.knowyours.co`)"
       - "traefik.enable=true"
       - "traefik.port=3000"
-      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
 
 volumes:
   neo4j_data:
