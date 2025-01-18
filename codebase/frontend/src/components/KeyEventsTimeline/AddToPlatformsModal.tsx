@@ -1,6 +1,7 @@
 import React from "react";
 import { Calendar02Icon } from "hugeicons-react";
 import { toast } from "react-toastify";
+import { openModal } from "@/lib/utils";
 
 export const AddToPlatformsModal = ({
   ics,
@@ -54,7 +55,7 @@ export const AddToPlatformsModal = ({
           </button>
           <button
             onClick={() => {
-              toast("Trello power-up still under review.");
+              openModal("trello_alert_modal");
             }}
             className="bg-pink-600 text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
           >
