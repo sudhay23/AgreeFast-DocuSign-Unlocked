@@ -1,4 +1,3 @@
-import json
 from pydantic import BaseModel
 from typing import List
 from langchain.prompts import ChatPromptTemplate
@@ -92,8 +91,8 @@ CAPTURE_KEY_TIME_PERIODS_PROMPT = ChatPromptTemplate.from_template("""
 """)
 
 PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT = ChatPromptTemplate.from_template("""
-    You are an expert .ics file maker. Make sure not to explain yourself or give rationales. Your output should be a JSON only. 
-    From the input JSON of events, construct ICS only from events which logically make sense. Make sure to add a 1 day, 3 day and 1 week reminder to each event. DO NOT add reminders as seperate events but use ICS ALARM. Ignore events that do not have a valid start and end date. 
+    You are an expert in creating .ics files from a list of events to be captured in a single ICS file with appropriate reminders and capturing the right descriptions and summaries. Make sure not to explain yourself or give rationales other than the actual ICS file. Your output should be a JSON only. 
+    From the input JSON of events, construct ICS only from events which logically make sense which have defined start and end dates. Make sure to add a 1 day, 3 day and 1 week reminder to each event in the ICS file. DO NOT add reminders as seperate events but use ICS ALARM. Ignore events that do not have a valid start and end date. 
     Remember that the dates in identified events are in DD-MM-YYYY format. Also IMPORTANTLY, remember that you may be preparing the ICS file from events captured from more than 1 agreements, hence, make sure to distinctively identify and capture all those events in the calendar. Exhaustively capture events but IMPORTANTLY ensure that the ICS file is valid with correct date, time and reminder alarm values.
 
     <identified_events> 
@@ -118,24 +117,3 @@ class DateEventResponse(BaseModel):
 
 class ICSResponse(BaseModel):
     data: str
-
-# --------------------------------------------------------------------------------------------------------------------------------------------
-
-PREPARE_FINAL_CHAT_ANSWER_FROM_CONTEXT_PROMPT = ChatPromptTemplate.from_template("""
-    You are an expert in answering a question from purely referring details from a context given to you. Don't forget to ONLY answer from the provided context and NEVER invent new facts. If you are unaable to answer from the context, simply tell "I'm sorry but I could'nt find an answer for that".
-    The user's question will be within the <user_question> tag. Contexts will be given under both <embeddings_context> and <graph_text_context> tags. If atleast one of this has data within it, purely answer from those. If both these context tags are empty, simply tell "I'm sorry but I could'nt find an answer for that".
-    Your return answer should be direct like a conversation with the user. Hence DO NOT include explanations and rationales in your answer. (Example: DO NOT include "Based on the provided context,..." to your answer. JUST ANSWER THE QUESTION DIRECTLY.)
-    Answer to the user's question with all helpful information from the context as briefly but with all information essential to answering the question. 
-                                                                                 
-    <embeddings_context> 
-        {embeddings_context}                                                          
-    </embeddings_context> 
-    
-    <graph_text_context>
-        {graph_text_context}
-    </graph_text_context>
-                                                                                 
-    <user_question>{user_question}</user_question>
-                                                                                 
-    Your detailed helpful answer to the user: 
-""")

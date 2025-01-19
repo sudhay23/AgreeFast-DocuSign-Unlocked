@@ -29,11 +29,15 @@ export const ChatHistory = ({
   let question2 = "";
 
   if (p === "1") {
-    question1 = "Who are the parties involved in this agreement>";
-    question2 = "Who are the parties involved in this agreement?";
+    question1 =
+      "What are the conditions under which the Recipient is allowed to disclose Confidential Information without breaching the agreement?";
+    question2 =
+      "What actions must the Recipient take if legally compelled to disclose Tally’s Confidential Information?";
   } else if (p == "2") {
-    question1 = "Who are the parties involved in this agreement>";
-    question2 = "Who are the parties involved in this agreement?";
+    question1 =
+      "If the customer modifies the provided Solutions or Professional Services (PS) and a third-party infringement claim arises, is TallyCo Solar, Inc. obligated to provide indemnification? Why or why not?";
+    question2 =
+      "Can you explain Supplier's responsibilities in ensuring disaster recovery under the agreement?";
   }
 
   const chatWithSamplePrompt = async (prompt: string) => {
@@ -141,7 +145,7 @@ export const ChatHistory = ({
             {question1.length > 0 && question2.length > 0 ? (
               <div className="flex items-center gap-5 flex-wrap justify-start mt-10">
                 <button
-                  className="flex flex-col items-start gap-2 border-2 border-violet border-opacity-50 rounded-xl w-[150px] text-[14px] font-medium p-2 hover:bg-violet hover:bg-opacity-15 transition-all hover:transition-all"
+                  className="flex flex-1 flex-col items-start gap-2 border-2 border-violet border-opacity-50 rounded-xl w-[150px] text-[14px] font-medium p-2 hover:bg-violet hover:bg-opacity-15 transition-all hover:transition-all"
                   onClick={() => chatWithSamplePrompt(question1)}
                 >
                   <SparklesIcon size={20} className="text-purple" />
@@ -150,7 +154,7 @@ export const ChatHistory = ({
                   </p>
                 </button>
                 <button
-                  className="flex flex-col items-start gap-2 border-2 border-violet border-opacity-50 rounded-xl w-[150px] text-[14px] font-medium p-2 hover:bg-violet hover:bg-opacity-15 transition-all hover:transition-all"
+                  className="flex flex-1 flex-col items-start gap-2 border-2 border-violet border-opacity-50 rounded-xl w-[150px] text-[14px] font-medium p-2 hover:bg-violet hover:bg-opacity-15 transition-all hover:transition-all"
                   onClick={() => chatWithSamplePrompt(question2)}
                 >
                   <SparklesIcon size={20} className="text-purple" />

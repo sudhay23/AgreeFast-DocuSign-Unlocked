@@ -7,11 +7,10 @@ from langchain.embeddings.ollama import OllamaEmbeddings
 
 llm = provision_chat_model()
 embedding_model = OllamaEmbeddings(base_url=os.getenv("OLLAMA_URI"),model="nomic-embed-text")
-graph = Neo4jGraph(url=os.getenv("NEO4J_URI"),database=f"neo4j",username=os.getenv("NEO4J_USERNAME"),password=os.getenv("NEO4J_PASSWORD"))
 
 
-neo4j_vector = Neo4jVector(embedding_model,graph=graph)
-vector_store = neo4j_vector.from_existing_graph(embedding=embedding_model,search_type="vector",node_label="Document",text_node_properties=['text'],embedding_node_property="vector_embedding",)
+# neo4j_vector = Neo4jVector(embedding_model,graph=graph)
+vector_store = Neo4jVector.from_existing_graph(embedding=embedding_model,search_type="vector",node_label="Document",text_node_properties=['text'],embedding_node_property="vector_embedding",)
 
 
 # query = "should i return my properties"

@@ -17,7 +17,7 @@ const router = express.Router();
 
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
-const AI_SERVICE_BASE_URL = process.env.AI_SERVICE_BASE_URL;
+const CHAT_SERVICE_BASE_URL = process.env.CHAT_SERVICE_BASE_URL;
 
 console.log("Email user:", EMAIL_USER);
 console.log("Email pass:", EMAIL_PASS);
@@ -64,7 +64,7 @@ router.get(
         to: envelope.recipients_emails.join(","),
         cc: envelope.sender_email,
         subject: "Activated agreefast dashboard",
-        text: `
+        html: `
         <!DOCTYPE html>
 <html>
   <head>
@@ -135,7 +135,7 @@ router.get(
     <div class="email-container">
       <div class="logo">
         <img
-          src="${process.env.FRONTEND_BASE_URL}/static/logo.png"
+          src="${process.env.BACKEND_BASE_URL}/static/logo.png"
           alt="AgreeFast Logo"
         />
         <h1>agreefast</h1>
@@ -178,7 +178,6 @@ router.get(
     </div>
   </body>
 </html>
-
         `,
       };
 
@@ -312,7 +311,7 @@ router.post("/:id/chat", async (req: Request, res: Response): Promise<any> => {
   const envelopeId = req.params.id;
   const { user_question } = req.body;
   try {
-    const response = await axios.post(`${AI_SERVICE_BASE_URL}/chat`, {
+    const response = await axios.post(`${CHAT_SERVICE_BASE_URL}/chat`, {
       envelope_id: envelopeId,
       user_question,
     });
@@ -376,11 +375,14 @@ router.post(
       .button-container {
         margin: 30px 0;
         text-align: center;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        justify-content: center;
       }
       .button {
         display: inline-block;
-        padding: 12px 28px;
-        margin: 0 10px;
+        padding: 10px 25px;
         text-decoration: none;
         border-radius: 6px;
         font-weight: 600;
@@ -435,7 +437,10 @@ router.post(
   <body>
     <div class="email-container">
       <div class="logo">
-        <img src="${process.env.FRONTEND_BASE_URL}/static/logo.png" alt="AgreeFast Logo" />
+        <img
+          src="${process.env.BACKEND_BASE_URL}/static/logo.png"
+          alt="AgreeFast Logo"
+        />
         <h1>agreefast</h1>
       </div>
 
@@ -465,17 +470,17 @@ router.post(
         >
           Deactivate <span>agreefast</span>
         </a>
-        <div class="end">
-          <p>
-            Upon activation, recipients of the Docusign agreement will receive
-            their links to the customized <span>agreefast</span> dashboard
-            opening up access to smart document analysis features.
-          </p>
-          <p>
-            As the agreement sender, feel free to deactivate the
-            <span>agreefast</span> dashboard any time using this email.
-          </p>
-        </div>
+      </div>
+      <div class="end">
+        <p>
+          Upon activation, recipients of the Docusign agreement will receive
+          their links to the customized <span>agreefast</span> dashboard opening
+          up access to smart document analysis features.
+        </p>
+        <p>
+          As the agreement sender, feel free to deactivate the
+          <span>agreefast</span> dashboard any time using this email.
+        </p>
       </div>
       <div class="signature">
         <p>

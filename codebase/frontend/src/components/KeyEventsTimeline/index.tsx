@@ -8,6 +8,7 @@ import { ElaborateEventModal } from "./ElaborateEventModal";
 import { Tooltip } from "react-tooltip";
 import axios from "axios";
 import { appConfig } from "@/config/config";
+import { TrelloAlertModal } from "./TrelloAlertModal";
 
 export const KeyEventsTimeline = ({ envelopeId }: { envelopeId: string }) => {
   const [activeEvent, setActiveEvent] = useState<Event | null>(null);
@@ -20,7 +21,7 @@ export const KeyEventsTimeline = ({ envelopeId }: { envelopeId: string }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${appConfig.backendUrl}/api/envelope/${envelopeId}/getIcsData`
+          `${appConfig.backendUrl}/api/envelope/${envelopeId}/getIcsData`,
         );
         const data = response.data;
         setIcs(data.icsData);
@@ -94,8 +95,9 @@ export const KeyEventsTimeline = ({ envelopeId }: { envelopeId: string }) => {
         }}
         place="top"
       />
-      <AddToPlatformsModal ics={ics} />
+      <AddToPlatformsModal ics={ics} envId={envelopeId} />
       <ElaborateEventModal event={activeEvent} />
+      <TrelloAlertModal />
     </div>
   );
 };

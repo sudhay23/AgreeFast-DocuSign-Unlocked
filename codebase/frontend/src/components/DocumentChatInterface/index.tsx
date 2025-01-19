@@ -3,8 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ChatHistory } from "../ChatHistory";
 import { Chat } from "../ChatHistory/types";
 import { ArrowExpand01Icon, MultiplicationSignIcon } from "hugeicons-react";
-import axios from "axios";
-import { appConfig } from "@/config/config";
+import { socket } from "@/lib/socket";
 
 export const DocumentChatInterface = ({
   envelopeId,
@@ -16,6 +15,38 @@ export const DocumentChatInterface = ({
   const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef<any>(null);
 
+  useEffect(() => {
+    socket.connect();
+    function onConnect() {
+      console.log("Socket connected");
+    }
+
+    function onDisconnect() {
+      console.log("Socket disconnected");
+    }
+    function onChatResponse(payload: any) {
+      const reply = payload.response;
+      setChats((prev: any) => [
+        ...prev,
+        {
+          role: "assistant",
+          message: reply,
+        },
+      ]);
+      setLoading(false);
+    }
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    socket.on("ai_response", onChatResponse);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+      socket.off("ai_response", onChatResponse);
+    };
+  }, []);
+
   const chatWithBot = async (prompt: string) => {
     try {
       setLoading(true);
@@ -24,25 +55,18 @@ export const DocumentChatInterface = ({
           chatContainerRef.current.scrollHeight;
       }
       setPrompt("");
-      const response = await axios.post(
-        `${appConfig.backendUrl}/api/envelope/${envelopeId}/chat`,
-        {
-          user_question: prompt,
-        }
-      );
-      const data = response.data;
       setChats((prev: any) => [
         ...prev,
         {
           role: "human",
           message: prompt,
         },
-        {
-          role: "assistant",
-          message: data.response,
-        },
       ]);
-      setLoading(false);
+      const data = {
+        user_question: prompt,
+        envelope_id: envelopeId,
+      };
+      socket.emit("chat", data);
     } catch (err) {
       console.log(err);
       setPrompt("");

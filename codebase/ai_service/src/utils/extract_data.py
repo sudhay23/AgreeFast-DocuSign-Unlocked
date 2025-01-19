@@ -1,7 +1,8 @@
-import dotenv
+import dotenv, logging
 dotenv.load_dotenv("./.env")
-import os,json
+import os
 from datetime import datetime
+from utils.model import provision_chat_model
 from utils.mongodb import update_captured_events, update_events_ics, update_compliance_obligatory_score, update_obligatory_statements, get_envelope_details
 from langchain_community.document_loaders.pdf import OnlinePDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -9,7 +10,7 @@ from utils.prompts import CAPTURE_KEY_TIME_PERIODS_PROMPT, DateEventResponse, PR
 
 
 def extract_events(envelope_id, document_name, document_path, llm, embedding_model):
-    print(f"----Extracting events in '{document_name}'----")
+    logging.info(f"----Extracting events in '{document_name}'----")
     document_link = f"{os.getenv('BACKEND_BASE_URL')}{document_path}"
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
@@ -23,7 +24,7 @@ def extract_events(envelope_id, document_name, document_path, llm, embedding_mod
     for x,y in zip(chunked_documents,range(len(chunked_documents))):
         captured_date_events = llm.with_structured_output(DateEventResponse).invoke(CAPTURE_KEY_TIME_PERIODS_PROMPT.format(todays_date=datetime.today().strftime("%d-%m-%Y"),captured_data=date_events,content_chunk=x.page_content))
         date_events['data'].extend([x.model_dump() for x in captured_date_events.captured_now])
-        print(f"{y+1}/{len(chunked_documents)} - Found {len(date_events['data'])} events")
+        logging.info(f"{y+1}/{len(chunked_documents)} - Found {len(date_events['data'])} events")
 
     # Update to include the document name
     for i in range(len(date_events['data'])):
@@ -34,18 +35,23 @@ def extract_events(envelope_id, document_name, document_path, llm, embedding_mod
 
 
 def constuct_ics_file(envelope_id, llm, embedding_model):
-    print(f"----Building ICS file for envelope '{envelope_id}'----")
+    logging.info(f"----Building ICS file for envelope '{envelope_id}'----")
     # Get all recorded events from DB
     date_events = get_envelope_details(envelope_id)['events']
 
     # Construct ICS file
-    ics_response = llm.with_structured_output(ICSResponse).invoke(PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
+    print("ICS Prompt: ",PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
+    # ics_response = llm.with_structured_output(ICSResponse).invoke(PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
+
+    # Use GPT-4o-mini to construct ICS file
+    mini_llm = provision_chat_model(os.getenv("AZURE_OPENAI_DEPLOYMENT_2"))
+    ics_response = mini_llm.with_structured_output(ICSResponse).invoke(PREPARE_ICS_FROM_CAPTURED_EVENTS_PROMPT.format(identified_events_data=date_events))
 
     # Write ICS file to DB
     update_events_ics(envelope_id,ics_response.data)
     
 def extract_obligatory_statements(envelope_id, document_name, document_path, llm, embedding_model):
-    print(f"----Extracting obligatory statements in '{document_name}'----")
+    logging.info(f"----Extracting obligatory statements in '{document_name}'----")
     document_link = f"{os.getenv('BACKEND_BASE_URL')}{document_path}"
 
     # Extract Obligations
@@ -59,7 +65,7 @@ def extract_obligatory_statements(envelope_id, document_name, document_path, llm
     for x,y in zip(chunked_documents,range(len(chunked_documents))):
         captured_obligatory_statements = llm.with_structured_output(ObligatoryStatementResponse).invoke(CAPTURE_OBLIGATORY_STATEMENTS_PROMPT.format(captured_data=obligatory_statements,content_chunk=x.page_content))
         obligatory_statements['data'].extend([x.model_dump() for x in captured_obligatory_statements.captured_now])
-        print(f"{y+1}/{len(chunked_documents)} - Found {len(obligatory_statements['data'])} obligatory statements")
+        logging.info(f"{y+1}/{len(chunked_documents)} - Found {len(obligatory_statements['data'])} obligatory statements")
     
     # Update to include the document name
     for i in range(len(obligatory_statements['data'])):

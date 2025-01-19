@@ -31,6 +31,8 @@ services:
     volumes:
       - rabbitmq_lib:/var/lib/rabbitmq
       - rabbitmq_log:/var/log/rabbitmq
+      - ./config_files/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro # Mount custom config
+
   trello_extension:
     image: node:alpine
     working_dir: /usr/src/app
@@ -39,6 +41,7 @@ services:
     volumes:
       - ./codebase/trello-powerup-html:/usr/src/app:ro
     command: npx http-server -p 8080
+
   backend_api_service:
     restart: always
     depends_on:
@@ -63,8 +66,20 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ./.env
+
+  chat_service:
+    restart: always
+    depends_on:
+      - neo4j
+      - rabbitmq
+    build:
+      context: ./codebase/chat_service
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
     ports:
       - 6500:6500
+
   frontend:
     restart: always
     build:
