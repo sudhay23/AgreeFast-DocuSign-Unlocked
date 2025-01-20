@@ -55,6 +55,8 @@ services:
       - ./.env
     ports:
       - 5500:5500
+    volumes:
+      - backend_static_directory:/agreefast_backend_api_service/static
 
   ai_service:
     restart: always
@@ -95,3 +97,4 @@ volumes:
   neo4j_plugins:
   rabbitmq_log:
   rabbitmq_lib:
+  backend_static_directory:
