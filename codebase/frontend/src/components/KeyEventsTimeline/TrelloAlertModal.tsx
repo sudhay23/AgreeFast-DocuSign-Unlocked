@@ -12,7 +12,7 @@ export const TrelloAlertModal = () => {
         <p className="text-[14px] text-black font-medium opacity-60 my-3">
           Our Trello power-up has not been listed officially past the review at
           the time of this hackathon. Please fill out the form below and we will
-          get back to you with a hands-on demo for you to try this featuer on.
+          get back to you with a hands-on demo for you to try this feature on.
         </p>
         <Link
           href="https://tally.so/r/wbK176"
