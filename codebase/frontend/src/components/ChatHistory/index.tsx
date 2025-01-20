@@ -29,15 +29,11 @@ export const ChatHistory = ({
   let question2 = "";
 
   if (p === "1") {
-    question1 =
-      "What are the conditions under which the Recipient is allowed to disclose Confidential Information without breaching the agreement?";
-    question2 =
-      "What actions must the Recipient take if legally compelled to disclose Tally’s Confidential Information?";
+    question1 = "What are the service fee rates applicable?";
+    question2 = "What is the area of jurisdiction for the NDA?";
   } else if (p == "2") {
-    question1 =
-      "If the customer modifies the provided Solutions or Professional Services (PS) and a third-party infringement claim arises, is TallyCo Solar, Inc. obligated to provide indemnification? Why or why not?";
-    question2 =
-      "Can you explain Supplier's responsibilities in ensuring disaster recovery under the agreement?";
+    question1 = "What is the max. value of contract amount?";
+    question2 = "When and how should customer content be provided?";
   }
 
   const chatWithSamplePrompt = async (prompt: string) => {

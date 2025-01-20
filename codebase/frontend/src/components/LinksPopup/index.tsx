@@ -34,8 +34,8 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
           <div
             onClick={() =>
               window.open(
-                "https://agreefast.knowyours.co/room/838a5c2b-212f-490f-bacd-f4badec99c24?p=1",
-                "_blank",
+                "https://agreefast.knowyours.co/room/0c0bc9ca-1cf1-4f7f-868b-e9f9b9be8a8b?p=1",
+                "_blank"
               )
             }
             className="flex items-center gap-1 hover:scale-105 transition-all cursor-pointer"
@@ -57,8 +57,8 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
           <div
             onClick={() =>
               window.open(
-                "https://agreefast.knowyours.co/room/fa012239-f2ec-428e-8e86-e0b4e05a6e0f?p=2",
-                "_blank",
+                "https://agreefast.knowyours.co/room/60823f15-f739-4232-87a9-146498e70d21?p=2",
+                "_blank"
               )
             }
             className="flex items-center gap-1 hover:scale-105 transition-all cursor-pointer"
