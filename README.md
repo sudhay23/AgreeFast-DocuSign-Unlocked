@@ -1,4 +1,4 @@
-# agreefast for Docusign
+# Agreefast for Docusign
 
 > ### Docusign Hackathon:Unlocked
 >
@@ -6,13 +6,13 @@
 
 ---
 
-## About `agreefast`
+## About `Agreefast`
 
-**agreefast** integrates seamlessly with Docusign, providing users with AI-driven insights into agreements.
+**Agreefast** integrates seamlessly with Docusign, providing users with AI-driven insights into agreements.
 
 It automatically analyzes the terms of contracts, calculates a **Compliance Obligatory Score**, our custom-made metric, to gauge the number of obligations in the agreement and the level of importance it has on keeping the agreements compliant and in force, and provides a list of obligations for each party involved. This helps users manage their contracts more effectively, ensuring they stay on track.
 
-Additionally, 'agreefast' extracts key events and timelines from signed agreements and allows users to add them to their device calendar.
+Additionally, 'Agreefast' extracts key events and timelines from signed agreements and allows users to add them to their device calendar.
 
 With the **Trello Power-Up**, users can track upcoming events, view completed events, and manage tasks directly from their Trello board using just the envelope ID from Docusign.
 
@@ -23,7 +23,7 @@ Visit "https://agreefast.knowyours.co/" to experience a demo.
 ## Technologies used
 
 - **Docusign Connect** for seamlessly integrating the envelopes before and after signing into our platform.
-- **Docusign Navigator** was also experimented with and 'agreefast' is built to readily support **Docusign Navigator** when the **Upload Agreement API** is made publically available as mentioned in the Docusign Developer documentation.
+- **Docusign Navigator** was also experimented with and 'Agreefast' is built to readily support **Docusign Navigator** when the **Upload Agreement API** is made publically available as mentioned in the Docusign Developer documentation.
 - **NextJS** for the React based frontend web application
 - **OpenAI API** for LLMs
 - **Ollama API** for embedding models.
