@@ -293,7 +293,7 @@ router.get(
   }
 );
 
-// TODO: Implement this route
+// Implement this route
 router.get(
   "/:id/getIcsData",
   async (req: Request, res: Response): Promise<any> => {
@@ -306,7 +306,7 @@ router.get(
   }
 );
 
-// TODO: Implement this route
+// Implement this route
 router.post("/:id/chat", async (req: Request, res: Response): Promise<any> => {
   const envelopeId = req.params.id;
   const { user_question } = req.body;

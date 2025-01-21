@@ -87,7 +87,7 @@ const step_2_fill_connect_config_form_and_submit = async () => {
         );
 
         // Step 2.2 - Fill Webhook URL
-        // FIXME - Add deployed Webhook URL
+        // Add deployed Webhook URL
         await fill_input(
           "/html/body/div[1]/div/div/div/div[2]/div[1]/div[1]/div/div[2]/div/div[2]/div[1]/div/div[4]/div[2]/div/input",
           "https://agreefastapi.knowyours.co/webhook"
