@@ -23,19 +23,20 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
       <div className="flex items-center justify-between flex-1 w-full">
         <div className="flex flex-col items-center gap-5">
           <div className="flex flex-col items-center gap-3">
-            <Image
-              src={"/demo-1.jpeg"}
-              alt="Demo agreement 1"
-              width={100}
-              height={20}
-            />
+            <div className="relative w-[100px] h-[140px]">
+              <Image
+                src={"/demo-1.jpeg"}
+                alt="Demo agreement 1"
+                layout="fill"
+              />
+            </div>
             <p className="text-black text-opacity-75">Experience 1</p>
           </div>
           <div
             onClick={() =>
               window.open(
                 "https://agreefast.knowyours.co/room/0c0bc9ca-1cf1-4f7f-868b-e9f9b9be8a8b?p=1",
-                "_blank"
+                "_blank",
               )
             }
             className="flex items-center gap-1 hover:scale-105 transition-all cursor-pointer"
@@ -46,19 +47,16 @@ export const LinksPopup = ({ setShowPopup }: { setShowPopup: any }) => {
         </div>
         <div className="flex flex-col items-center gap-5">
           <div className="flex flex-col items-center gap-3">
-            <Image
-              src={"/demo-2.png"}
-              alt="Demo agreement 1"
-              width={100}
-              height={20}
-            />
+            <div className="relative w-[100px] h-[140px]">
+              <Image src={"/demo-2.png"} alt="Demo agreement 1" layout="fill" />
+            </div>
             <p className="text-black text-opacity-75">Experience 2</p>
           </div>
           <div
             onClick={() =>
               window.open(
                 "https://agreefast.knowyours.co/room/60823f15-f739-4232-87a9-146498e70d21?p=2",
-                "_blank"
+                "_blank",
               )
             }
             className="flex items-center gap-1 hover:scale-105 transition-all cursor-pointer"

@@ -81,7 +81,6 @@ services:
       - ./.env
     ports:
       - 6500:6500
-
   frontend:
     restart: always
     build:

@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import axios from "axios";
+import crypto from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,7 +28,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail", // or use your preferred SMTP service
   auth: {
     user: EMAIL_USER, // Email account used to send emails
-    pass: EMAIL_PASS, // Password or app-specific password
+    pass: EMAIL_PASS, // Password or router-specific password
   },
 });
 
@@ -45,7 +46,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  }
+  },
 );
 
 router.get(
@@ -199,7 +200,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  }
+  },
 );
 
 router.get(
@@ -218,7 +219,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  }
+  },
 );
 
 router.get(
@@ -237,7 +238,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  }
+  },
 );
 router.get(
   "/:id/getObligations",
@@ -255,7 +256,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  }
+  },
 );
 router.get(
   "/:id/getSignedDate",
@@ -273,7 +274,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  }
+  },
 );
 
 router.get(
@@ -290,7 +291,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  }
+  },
 );
 
 // Implement this route
@@ -303,7 +304,7 @@ router.get(
       return res.status(404).json({ message: "Envelope not found" });
     }
     res.json({ icsData: envelope.ics_data });
-  }
+  },
 );
 
 // Implement this route
@@ -516,7 +517,52 @@ router.post(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  }
+  },
 );
+
+router.get("/generate-pkce", (req, res) => {
+  // Generate a random code_verifier (43-128 chars)
+  const codeVerifier = crypto.randomBytes(32).toString("base64url");
+
+  // Hash code_verifier using SHA-256
+  const codeChallenge = crypto
+    .createHash("sha256")
+    .update(codeVerifier)
+    .digest("base64url");
+
+  // Send both back to the frontend
+  res.json({ code_verifier: codeVerifier, code_challenge: codeChallenge });
+});
+
+router.get("/get-signing-url", async (req: any, res: any) => {
+  try {
+    const { base_uri, account_id, envelopeId, email, accessToken, name } =
+      req.query;
+    const response = await axios.post(
+      `${base_uri}/restapi/v2.1/accounts/${account_id}/envelopes/${envelopeId}/views/recipient`,
+      {
+        authenticationMethod: "email",
+        returnUrl: `${process.env.FRONTEND_BASE_URL}/room/${envelopeId}`,
+        email: email,
+        userName: name,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return res.status(200).json({
+      data: response.data,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      data: {
+        signingUrl: "hi",
+      },
+    });
+  }
+});
 
 export default router;
