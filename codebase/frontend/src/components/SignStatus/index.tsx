@@ -57,7 +57,7 @@ export const SignStatus = ({ envelopeId }: { envelopeId: string }) => {
           <span className="loading loading-dots loading-md text-violet"></span>
         </>
       ) : (
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-0">
           <div className="flex items-center gap-2 pl-2 animate-in zoom-in fade-in duration-1000">
             <Image
               src={date ? "/signed.png" : "/not-signed.png"}
@@ -82,10 +82,11 @@ export const SignStatus = ({ envelopeId }: { envelopeId: string }) => {
           </div>
           <button
             onClick={handleSigning}
-            className="bg-violet text-white px-2 flex items-center gap-3 rounded-lg py-2 hover:opacity-80 hover:transition-all transition-all"
+            className="px-2 flex items-center gap-1 rounded-lg py-2 hover:opacity-80 hover:scale-105 hover:transition-all transition-all"
           >
-            <SignatureIcon size={15} className="text-white" strokeWidth={2} />
-            <p className="text-white text-[12px]">Sign now</p>
+            <p className="text-violet text-[12px]">-</p>
+            <SignatureIcon size={15} className="text-violet" strokeWidth={2} />
+            <p className="text-violet text-[12px]">Sign now</p>
           </button>
         </div>
       )}
