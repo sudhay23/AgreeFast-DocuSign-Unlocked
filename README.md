@@ -23,6 +23,7 @@ Visit "https://agreefast.knowyours.co/" to experience a demo.
 ## Technologies used
 
 - **Docusign Connect** for seamlessly integrating the envelopes before and after signing into our platform.
+- **Docusign eSignature API** for enabling the **QuickSign** feature on 'Agreefast' which helps users sign envelopes quickly right from within our platform.
 - **Docusign Navigator** was also experimented with and 'Agreefast' is built to readily support **Docusign Navigator** when the **Upload Agreement API** is made publically available as mentioned in the Docusign Developer documentation.
 - **NextJS** for the React based frontend web application
 - **OpenAI API** for LLMs
@@ -37,14 +38,14 @@ Visit "https://agreefast.knowyours.co/" to experience a demo.
 
 ### Microservices
 
-| Microservice/Codebase | Description                                                                                                                                                                        |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ai_service`          | Consumes from RabbitMQ upon detecting new Docusign envelope sent, to make AI inferences and prepare the knowledge graph for driving the Agreefast Envelope Chatbot                 |
-| `backend`             | Hosts the **Docusign Connect** POST webhook and enables interaction with 'Agreefast Dashboard' and Trello Power-up                                                                 |
-| `chat_service`        | Works on key inference phase when the chatbot is queried by the user on the frontend. Exposes API endpoints to be integrated to 3rd party services like WebEx or Slack if required |
-| `chrome_extension`    | Helps new users leverage Docusign Connect to link to Agreefast and quickly open the relevant Agreefast Dashboard from the Docusign Agreement Signing Page                          |
-| `frontend`            | Agreefast Dashboard and landing page built with NextJS for a seamless dashboard user experience                                                                                    |
-| `trello-powerup-html` | Hosts Trello Power-up specific integration assests to populate details captured from envelope into Trello boards                                                                   |
+| Microservice/Codebase | Description                                                                                                                                                                                                |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ai_service`          | Consumes from RabbitMQ upon detecting new Docusign envelope sent, to make AI inferences and prepare the knowledge graph for driving the Agreefast Envelope Chatbot                                         |
+| `backend`             | Hosts the **Docusign Connect** POST webhook and enables interaction with 'Agreefast Dashboard' and Trello Power-up. Helps enable the **QuickSign** feature by integrating with **Docusign eSignature API** |
+| `chat_service`        | Works on key inference phase when the chatbot is queried by the user on the frontend. Exposes API endpoints to be integrated to 3rd party services like WebEx or Slack if required                         |
+| `chrome_extension`    | Helps new users leverage Docusign Connect to link to Agreefast and quickly open the relevant Agreefast Dashboard from the Docusign Agreement Signing Page                                                  |
+| `frontend`            | Agreefast Dashboard and landing page built with NextJS for a seamless dashboard user experience                                                                                                            |
+| `trello-powerup-html` | Hosts Trello Power-up specific integration assests to populate details captured from envelope into Trello boards                                                                                           |
 
 ### User Experience Sequence diagram
 

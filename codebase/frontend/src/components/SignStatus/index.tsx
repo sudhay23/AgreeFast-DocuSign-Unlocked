@@ -37,7 +37,7 @@ export const SignStatus = ({ envelopeId }: { envelopeId: string }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${appConfig.backendUrl}/api/envelope/${envelopeId}/getSignedDate`,
+          `${appConfig.backendUrl}/api/envelope/${envelopeId}/getSignedDate`
         );
         const data = response.data;
         if (data.signed_on === 0) setDate("");
@@ -86,7 +86,7 @@ export const SignStatus = ({ envelopeId }: { envelopeId: string }) => {
           >
             <p className="text-violet text-[12px]">-</p>
             <SignatureIcon size={15} className="text-violet" strokeWidth={2} />
-            <p className="text-violet text-[12px]">Sign now</p>
+            <p className="text-violet text-[12px]">QuickSign</p>
           </button>
         </div>
       )}
