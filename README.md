@@ -47,6 +47,21 @@ Visit "https://agreefast.knowyours.co/" to experience a demo.
 | `frontend`            | Agreefast Dashboard and landing page built with NextJS for a seamless dashboard user experience                                                                                                            |
 | `trello-powerup-html` | Hosts Trello Power-up specific integration assests to populate details captured from envelope into Trello boards                                                                                           |
 
+---
+
+| **Endpoint**                             | **Method** | **Description**                                                                                 |
+| ---------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| `/api/envelope/:id/getActivationStatus`  | GET        | Returns the activation status of the specified envelope.                                        |
+| `/api/envelope/:id/activate`             | GET        | Activates the specified envelope and notifies recipients via email.                             |
+| `/api/envelope/:id/deactivate`           | GET        | Deactivates the specified envelope.                                                             |
+| `/api/envelope/:id/getObligationScore`   | GET        | Fetches the compliance obligatory score for the specified envelope.                             |
+| `/api/envelope/:id/getObligations`       | GET        | Retrieves the obligations associated with the specified envelope.                               |
+| `/api/envelope/:id/getSignedDate`        | GET        | Fetches the signed date for the specified envelope.                                             |
+| `/api/envelope/:id/getAgreements`        | GET        | Retrieves the agreements associated with the specified envelope.                                |
+| `/api/envelope/:id/getIcsData`           | GET        | Retrieves ICS data for the specified envelope.                                                  |
+| `/api/envelope/:id/chat`                 | POST       | Sends user questions to the chat service for the specified envelope and retrieves the response. |
+| `/api/envelope/:id/aiProcessingComplete` | POST       | Marks the AI processing for the specified envelope as complete and sends notification emails.   |
+
 ### User Experience Sequence diagram
 
 <img src="https://agreefastapi.knowyours.co/static/chrome.jpg" alt="drawing" width="200"/>
