@@ -7,8 +7,6 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 function SigningSuccessPage() {
-  const hash = window.location.hash;
-
   const [accounts, setAccounts] = useState<any>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,10 +14,11 @@ function SigningSuccessPage() {
   const [signingUrl, setSigningUrl] = useState("");
   const proceedToSigning = async (account_id: any, base_uri: any) => {
     try {
+      const hash = window.location.hash;
       toast("Generating the signing URL. Please hold on...");
       const envelopeId = hash.split("#")[1].split("&")[4].split("=")[1];
       const res = await axios.get(
-        `${appConfig.backendUrl}/api/envelope/get-signing-url?base_uri=${base_uri}&account_id=${account_id}&envelopeId=${envelopeId}&email=${email}&accessToken=${accessToken}&name=${name}`,
+        `${appConfig.backendUrl}/api/envelope/get-signing-url?base_uri=${base_uri}&account_id=${account_id}&envelopeId=${envelopeId}&email=${email}&accessToken=${accessToken}&name=${name}`
       );
       const signingUrl = res.data.data.url;
       setSigningUrl(signingUrl);
@@ -30,6 +29,7 @@ function SigningSuccessPage() {
 
   useEffect(() => {
     (async () => {
+      const hash = window.location.hash;
       const access_token = hash.split("#")[1].split("=")[1].split("&")[0];
       setAccessToken(access_token);
       const user = (
