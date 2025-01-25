@@ -52,7 +52,7 @@ function SigningSuccessPage() {
         <div className="flex flex-col items-center gap-5">
           <SignatureIcon size={60} className="text-violet" />
           <h1 className="text-black font-regular text-[22px]">
-            Here is your signing URL:{" "}
+            Here is your signing URL{" "}
           </h1>
           <Link
             href={signingUrl}
