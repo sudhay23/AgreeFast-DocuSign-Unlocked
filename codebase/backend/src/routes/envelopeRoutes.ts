@@ -1,3 +1,579 @@
+/**
+ * @swagger
+ * /api/envelope/{id}/getActivationStatus:
+ *   get:
+ *     summary: Get the activation status of an envelope
+ *     description: Retrieve whether the specified envelope is currently active or not.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with the activation status of the envelope.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 isActive:
+ *                   type: boolean
+ *                   description: The activation status of the envelope.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/activate:
+ *   get:
+ *     summary: Activate an envelope
+ *     description: Activate the specified envelope and send a notification email to all recipients.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Envelope activated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Confirmation message.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/deactivate:
+ *   get:
+ *     summary: Deactivate an envelope
+ *     description: Deactivate the specified envelope.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Envelope deactivated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Confirmation message.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/getIcsData:
+ *   get:
+ *     summary: Get ICS data for an envelope
+ *     description: Retrieve ICS data associated with the specified envelope.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with ICS data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 icsData:
+ *                   type: string
+ *                   description: The ICS data associated with the envelope.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/chat:
+ *   post:
+ *     summary: Chat functionality for an envelope
+ *     description: Process user questions related to the specified envelope through the chat service.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_question:
+ *                 type: string
+ *                 description: The user's question.
+ *                 example: "What is the status of this envelope?"
+ *     responses:
+ *       200:
+ *         description: Chat response from the service.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 response:
+ *                   type: string
+ *                   description: The response from the chat service.
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/aiProcessingComplete:
+ *   post:
+ *     summary: Mark AI processing as complete
+ *     description: Mark the AI processing for the specified envelope as complete and notify the sender.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: AI processing marked as complete.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Confirmation message.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/getObligationScore:
+ *   get:
+ *     summary: Get compliance obligation score
+ *     description: Retrieve the compliance obligation score for the specified envelope.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with the compliance obligation score.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 compliance_obligatory_score:
+ *                   type: number
+ *                   description: The compliance obligation score of the envelope.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/getObligations:
+ *   get:
+ *     summary: Get obligations
+ *     description: Retrieve the obligations associated with the specified envelope.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with the obligations.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 obligations:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: The obligations associated with the envelope.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/getSignedDate:
+ *   get:
+ *     summary: Get signed date
+ *     description: Retrieve the signed date for the specified envelope.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with the signed date.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 signed_on:
+ *                   type: string
+ *                   format: date-time
+ *                   description: The date and time the envelope was signed.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/{id}/getAgreements:
+ *   get:
+ *     summary: Get agreements
+ *     description: Retrieve the agreements associated with the specified envelope.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with the agreements.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 agreements:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       agreement_id:
+ *                         type: string
+ *                         description: The unique identifier of the agreement.
+ *                       details:
+ *                         type: string
+ *                         description: Additional details about the agreement.
+ *       404:
+ *         description: Envelope not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Envelope not found
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/generate-pkce:
+ *   get:
+ *     summary: Generate PKCE code verifier and challenge
+ *     description: Generates a PKCE (Proof Key for Code Exchange) code_verifier and its hashed code_challenge.
+ *     responses:
+ *       200:
+ *         description: Successful response with code_verifier and code_challenge.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code_verifier:
+ *                   type: string
+ *                   description: The generated code_verifier (43-128 characters).
+ *                 code_challenge:
+ *                   type: string
+ *                   description: The SHA-256 hashed code_verifier (code_challenge).
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Server Error
+ */
+
+/**
+ * @swagger
+ * /api/envelope/get-signing-url:
+ *   get:
+ *     summary: Get envelope signing URL
+ *     description: Retrieves the signing URL for the specified envelope and recipient.
+ *     parameters:
+ *       - in: query
+ *         name: base_uri
+ *         required: true
+ *         description: The base URI for the API endpoint.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: account_id
+ *         required: true
+ *         description: The account ID associated with the envelope.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: envelopeId
+ *         required: true
+ *         description: The unique identifier of the envelope.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         description: The recipient's email address.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: accessToken
+ *         required: true
+ *         description: The access token for authentication.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: name
+ *         required: true
+ *         description: The recipient's name.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response with the signing URL.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     url:
+ *                       type: string
+ *                       description: The generated signing URL.
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     signingUrl:
+ *                       type: string
+ *                       example: Error generating signing URL
+ */
+
 import express, { Request, Response } from "express";
 import Envelope from "../models/Envelope.js";
 import nodemailer from "nodemailer";
@@ -46,7 +622,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  },
+  }
 );
 
 router.get(
@@ -200,7 +776,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  },
+  }
 );
 
 router.get(
@@ -219,7 +795,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  },
+  }
 );
 
 router.get(
@@ -238,8 +814,9 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  },
+  }
 );
+
 router.get(
   "/:id/getObligations",
   async (req: Request, res: Response): Promise<any> => {
@@ -256,8 +833,9 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  },
+  }
 );
+
 router.get(
   "/:id/getSignedDate",
   async (req: Request, res: Response): Promise<any> => {
@@ -274,7 +852,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  },
+  }
 );
 
 router.get(
@@ -291,7 +869,7 @@ router.get(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  },
+  }
 );
 
 // Implement this route
@@ -304,7 +882,7 @@ router.get(
       return res.status(404).json({ message: "Envelope not found" });
     }
     res.json({ icsData: envelope.ics_data });
-  },
+  }
 );
 
 // Implement this route
@@ -517,7 +1095,7 @@ router.post(
       console.error(error);
       res.status(500).json({ message: "Server Error" });
     }
-  },
+  }
 );
 
 router.get("/generate-pkce", (req, res) => {
@@ -550,7 +1128,7 @@ router.get("/get-signing-url", async (req: any, res: any) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      },
+      }
     );
     return res.status(200).json({
       data: response.data,
