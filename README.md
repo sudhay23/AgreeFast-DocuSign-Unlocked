@@ -36,6 +36,10 @@ Visit "https://agreefast.knowyours.co/" to experience a demo.
 - **amqplib** for consuming and producing to the message queues from the Node.js workers and **pika** for the Python workers in order to enable an asynchronous workflow for time consuming tasks via **RabbitMQ**.
 - **Microsoft Azure** and **Cloudflare** for cloud deployment and application security.
 
+### API Documentation with Swagger
+
+We have a well documented Swagger API documentation provision done for our entrypoint API server which can be experienced at [Swagger for Agreefast API Server](https://agreefastapi.knowyours.co/api-docs)
+
 ### Microservices
 
 | Microservice/Codebase | Description                                                                                                                                                                                                |
