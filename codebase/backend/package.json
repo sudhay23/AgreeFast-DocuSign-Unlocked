@@ -19,6 +19,8 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.16",
     "socket.io": "^4.8.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "typescript": "^5.7.2"
   },
   "devDependencies": {
@@ -28,6 +30,8 @@
     "@types/node": "^22.10.5",
     "@types/node-cron": "^3.0.11",
     "@types/nodemailer": "^6.4.17",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.7",
     "dotenv": "^16.4.7"
   }
 }

@@ -11,6 +11,8 @@ import path from "path";
 import envelopeRoutes from "./routes/envelopeRoutes.js";
 import { Server } from "socket.io";
 import axios from "axios";
+import swaggerui from "swagger-ui-express";
+import swaggerjsdoc from "swagger-jsdoc";
 
 // Resolve __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -25,7 +27,25 @@ dotenv.config({
   path: path.join(__dirname, "..", "..", "..", ".env"), // Going up two levels from backend
 });
 
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Envelope Service API",
+      version: "1.0.0",
+      description: "A simple Express Library API",
+    },
+    servers: [
+      {
+        url: process.env.DEPLOYED_BACKEND_URL || "http://localhost:5500",
+      },
+    ],
+  },
+  apis: ["./dist/routes/*.js"],
+};
+
 const app = express();
+const spacs = swaggerjsdoc(options);
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
@@ -44,6 +64,7 @@ app.use(express.json({ limit: "50mb" }));
 
 // Serve static files from the 'static' directory
 app.use("/static", express.static(path.join(__dirname, "..", "static")));
+app.use("/api-docs", swaggerui.serve, swaggerui.setup(spacs));
 
 let channel: amqp.Channel;
 
