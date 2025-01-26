@@ -37,7 +37,12 @@ const options = {
     },
     servers: [
       {
-        url: process.env.DEPLOYED_BACKEND_URL || "http://localhost:5500",
+        url: process.env.BACKEND_BASE_URL,
+        description: "Production Server",
+      },
+      {
+        url: "http://localhost:5500",
+        description: "Development Server",
       },
     ],
   },
